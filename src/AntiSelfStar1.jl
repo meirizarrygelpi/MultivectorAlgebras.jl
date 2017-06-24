@@ -64,26 +64,6 @@ star(z::AntiSelfStar1) = -z
 
 (+)(z::AntiSelfStar1) = z
 
-function (+){T <: Real}(x::AntiSelfStar1{T}, y::AntiSelfStar1{T})
-    AntiSelfStar1{T}(x.c + y.c)
-end
-
-function (+){T <: Real}(x::Multivector1{T}, y::AntiSelfStar1{T})
-    Multivector1{T}(x.l + y.c, x.r - y.c)
-end
-
-function (+){T <: Real}(x::AntiSelfStar1{T}, y::Multivector1{T})
-    Multivector1{T}(x.c + y.l, y.r - x.c)
-end
-
-function (+){T <: Real}(z::AntiSelfStar1{T}, a::T)
-    Multivector1{T}(z.c + a, -z.c)
-end
-
-function (+){T <: Real}(a::T, z::AntiSelfStar1{T})
-    Multivector1{T}(z.c + a, -z.c)
-end
-
 function (+)(x::AntiSelfStar1, y::AntiSelfStar1)
     AntiSelfStar1(x.c + y.c)
 end
@@ -108,26 +88,6 @@ function (-){T <: Real}(z::AntiSelfStar1{T})
     AntiSelfStar1{T}(-z.c)
 end
 
-function (-){T <: Real}(x::AntiSelfStar1{T}, y::AntiSelfStar1{T})
-    AntiSelfStar1{T}(x.c - y.c)
-end
-
-function (-){T <: Real}(x::Multivector1{T}, y::AntiSelfStar1{T})
-    Multivector1{T}(x.l - y.c, x.r + y.c)
-end
-
-function (-){T <: Real}(x::AntiSelfStar1{T}, y::Multivector1{T})
-    Multivector1{T}(x.c - y.l, -(x.c + y.r))
-end
-
-function (-){T <: Real}(z::AntiSelfStar1{T}, a::T)
-    Multivector1{T}(z.c - a, -z.c)
-end
-
-function (-){T <: Real}(a::T, z::AntiSelfStar1{T})
-    Multivector1{T}(a - z.c, z.c)
-end
-
 function (-)(x::AntiSelfStar1, y::AntiSelfStar1)
     AntiSelfStar1(x.c - y.c)
 end
@@ -148,22 +108,9 @@ function (-)(a::Real, z::AntiSelfStar1)
     Multivector1(a - z.c, z.c)
 end
 
-function (∧){T <: Real}(x::AntiSelfStar1{T}, y::AntiSelfStar1{T})
-    xy = x.c * y.c
-    Multivector1{T}(xy, -2xy)
-end
-
 function (∧)(x::AntiSelfStar1, y::AntiSelfStar1)
     xy = x.c * y.c
     Multivector1(xy, -2xy)
-end
-
-function (∧){T <: Real}(x::AntiSelfStar1{T}, y::Multivector1{T})
-    Multivector1{T}(x.c*y.l, x.c*(y.r - y.l))
-end
-
-function (∧){T <: Real}(x::Multivector1{T}, y::AntiSelfStar1{T})
-    Multivector1{T}(y.c*x.l, y.c*(x.r - x.l))
 end
 
 function (∧)(x::AntiSelfStar1, y::Multivector1)
@@ -180,14 +127,6 @@ end
 
 function (∧)(x::AntiSelfStar1, y::SelfStar1)
     x.c * y.c
-end
-
-function (*){T <: Real}(z::AntiSelfStar1{T}, a::T)
-    AntiSelfStar1{T}(a * z.c)
-end
-
-function (*){T <: Real}(a::T, z::AntiSelfStar1{T})
-    AntiSelfStar1{T}(a * z.c)
 end
 
 function (*)(z::AntiSelfStar1, a::Real)

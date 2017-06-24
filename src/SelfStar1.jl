@@ -58,40 +58,24 @@ The identity operation. This operation is an involution.
 """
 star(z::SelfStar1) = z
 
+# Unary +
 (+)(z::SelfStar1) = z
 
-function (+){T <: Real}(x::SelfStar1{T}, y::SelfStar1{T})
-    SelfStar1{T}(x.c + y.c)
-end
-
-function (+){T <: Real}(x::Multivector1{T}, y::SelfStar1{T})
-    Multivector1{T}(x.l + y.c, x.r + y.c)
-end
-
-function (+){T <: Real}(x::SelfStar1{T}, y::Multivector1{T})
-    Multivector1{T}(x.c + y.l, x.c + y.r)
-end
-
-function (+){T <: Real}(z::SelfStar1{T}, a::T)
-    Multivector1{T}(z.c + a, z.c)
-end
-
-function (+){T <: Real}(a::T, z::SelfStar1{T})
-    Multivector1{T}(z.c + a, z.c)
-end
-
+# Addition of self-star-conjugate multivectors
 function (+)(x::SelfStar1, y::SelfStar1)
     SelfStar1(x.c + y.c)
+end
+
+# Addition of a self-star-conjugate multivector and a multivector
+function (+)(x::SelfStar1, y::Multivector1)
+    Multivector1(x.c + y.l, x.c + y.r)
 end
 
 function (+)(x::Multivector1, y::SelfStar1)
     Multivector1(x.l + y.c, x.r + y.c)
 end
 
-function (+)(x::SelfStar1, y::Multivector1)
-    Multivector1(x.c + y.l, x.c + y.r)
-end
-
+# Addition of a self-star-conjugate multivector and a real number
 function (+)(z::SelfStar1, a::Real)
     Multivector1(z.c + a, z.c)
 end
@@ -100,35 +84,17 @@ function (+)(a::Real, z::SelfStar1)
     Multivector1(z.c + a, z.c)
 end
 
-
+# Unary -
 function (-){T <: Real}(z::SelfStar1{T})
     SelfStar1{T}(-z.c)
 end
 
-function (-){T <: Real}(x::SelfStar1{T}, y::SelfStar1{T})
-    SelfStar1{T}(x.c - y.c)
-end
-
-function (-){T <: Real}(x::Multivector1{T}, y::SelfStar1{T})
-    Multivector1{T}(x.l - y.c, x.r - y.c)
-end
-
-function (-){T <: Real}(x::SelfStar1{T}, y::Multivector1{T})
-    Multivector1{T}(x.c - y.l, x.c - y.r)
-end
-
-function (-){T <: Real}(z::SelfStar1{T}, a::T)
-    Multivector1{T}(z.c - a, z.c)
-end
-
-function (-){T <: Real}(a::T, z::SelfStar1{T})
-    Multivector1{T}(a - z.c, -z.c)
-end
-
+# Subtraction of self-star-conjugate multivectors
 function (-)(x::SelfStar1, y::SelfStar1)
     SelfStar1(x.c - y.c)
 end
 
+# Subtraction of self-star-conjugate multivector and a multivector
 function (-)(x::Multivector1, y::SelfStar1)
     Multivector1(x.l - y.c, x.r - y.c)
 end
@@ -137,6 +103,7 @@ function (-)(x::SelfStar1, y::Multivector1)
     Multivector1(x.c - y.l, x.c - y.r)
 end
 
+# Subtraction of self-star-conjugate and a real number
 function (-)(z::SelfStar1, a::Real)
     Multivector1(z.c - a, z.c)
 end
@@ -145,30 +112,19 @@ function (-)(a::Real, z::SelfStar1)
     Multivector1(a - z.c, -z.c)
 end
 
-function (∧){T <: Real}(x::SelfStar1{T}, y::SelfStar1{T})
-    xy = x.c * y.c
-    Multivector1{T}(xy, 2xy)
-end
-
+# Wedge product of two self-star-conjugate multivectors
 function (∧)(x::SelfStar1, y::SelfStar1)
     xy = x.c * y.c
     Multivector1(xy, 2xy)
 end
 
-function (∧){T <: Real}(x::SelfStar1{T}, y::Multivector1{T})
-    Multivector1{T}(x.c * y.l, x.c * (y.l + y.r))
+# Wedge product of a self-star-conjugate multivector and a multivector
+function (∧)(x::SelfStar1, y::Multivector1)
+    Multivector1(x.c * y.l, x.c * (y.l + y.r))
 end
 
-function (∧){T <: Real}(x::Multivector1{T}, y::SelfStar1{T})
-    Multivector1{T}(x.l * y.c, (x.l + x.r) * y.c)
-end
-
-function (*){T <: Real}(z::SelfStar1{T}, a::T)
-    SelfStar1{T}(a * z.c)
-end
-
-function (*){T <: Real}(a::T, z::SelfStar1{T})
-    SelfStar1{T}(a * z.c)
+function (∧)(x::Multivector1, y::SelfStar1)
+    Multivector1(x.l * y.c, (x.l + x.r) * y.c)
 end
 
 function (*)(z::SelfStar1, a::Real)

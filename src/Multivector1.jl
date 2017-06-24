@@ -123,18 +123,6 @@ end
 
 (+){T <: Real}(z::Multivector1{T}) = z
 
-function (+){T <: Real}(x::Multivector1{T}, y::Multivector1{T})
-    Multivector1{T}(x.l + y.l, x.r + y.r)
-end
-
-function (+){T <: Real}(z::Multivector1{T}, a::T)
-    Multivector1{T}(z.l + a, z.r)
-end
-
-function (+){T <: Real}(a::T, z::Multivector1{T})
-    Multivector1{T}(z.l + a, z.r)
-end
-
 function (+)(x::Multivector1, y::Multivector1)
     Multivector1(x.l + y.l, x.r + y.r)
 end
@@ -151,20 +139,8 @@ function (-){T <: Real}(z::Multivector1{T})
     Multivector1{T}(-z.l, -z.r)
 end
 
-function (-){T <: Real}(x::Multivector1{T}, y::Multivector1{T})
-    Multivector1{T}(x.l - y.l, x.r - y.r)
-end
-
 function (-)(x::Multivector1, y::Multivector1)
     Multivector1(x.l - y.l, x.r - y.r)
-end
-
-function (-){T <: Real}(z::Multivector1{T}, a::T)
-    Multivector1{T}(z.l - a, z.r)
-end
-
-function (-){T <: Real}(a::T, z::Multivector1{T})
-    Multivector1{T}(a - z.l, -z.r)
 end
 
 function (-)(z::Multivector1, a::Real)
@@ -180,9 +156,6 @@ end
 
 Wedge product of two 1-dimensional multivectors.
 """
-function (∧){T <: Real}(x::Multivector1{T}, y::Multivector1{T})
-    Multivector1{T}(x.l*y.l, x.r*y.l + y.r*x.l)
-end
 
 function (∧)(x::Multivector1, y::Multivector1)
     Multivector1(x.l*y.l, x.r*y.l + y.r*x.l)
@@ -194,14 +167,6 @@ end
 
 Scaling and/or reflection of a `Multivector1` by a real number.
 """
-function (*){T <: Real}(z::Multivector1{T}, a::T)
-    Multivector1{T}(z.l*a, z.r*a)
-end
-
-function (*){T <: Real}(a::T, z::Multivector1{T})
-    Multivector1{T}(z.l*a, z.r*a)
-end
-
 function (*)(z::Multivector1, a::Real)
     Multivector1(z.l*a, z.r*a)
 end
@@ -316,13 +281,6 @@ function crossratio(w::AbstractMultivector1,
     inv(x-y) ∧ (w-y) ∧ inv(w-z) ∧ (x-z)
 end
 
-function crossratio{T <: Real}(w::AbstractMultivector1{T},
-                               x::AbstractMultivector1{T},
-                               y::AbstractMultivector1{T},
-                               z::AbstractMultivector1{T})
-    inv(x-y) ∧ (w-y) ∧ inv(w-z) ∧ (x-z)
-end
-
 """
     möbius(z::AbstractMultivector1,
            a::AbstractMultivector1,
@@ -345,18 +303,6 @@ function möbius(z::AbstractMultivector1,
     ((a ∧ z) + b) ∧ inv((c ∧ z) + d)
 end
 
-function möbius{T <: Real}(z::AbstractMultivector1{T},
-                           a::AbstractMultivector1{T},
-                           b::AbstractMultivector1{T},
-                           c::AbstractMultivector1{T},
-                           d::AbstractMultivector1{T})
-    ((a ∧ z) + b) ∧ inv((c ∧ z) + d)
-end
-
 function möbius(z::AbstractMultivector1, a::Real, b::Real, c::Real, d::Real)
-    ((a * z) + b) ∧ inv((c * z) + d)
-end
-
-function möbius{T <: Real}(z::AbstractMultivector1{T}, a::T, b::T, c::T, d::T)
     ((a * z) + b) ∧ inv((c * z) + d)
 end
