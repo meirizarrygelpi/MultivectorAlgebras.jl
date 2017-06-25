@@ -26,9 +26,9 @@ abstract AbstractMultivector{T <: Real} <: Number
 include("Multivector1.jl")
 include("SelfStar1.jl")
 include("AntiSelfStar1.jl")
-# include("Multivector2.jl")
-# include("SelfStar2.jl")
-# include("AntiSelfStar2.jl")
+include("Multivector2.jl")
+include("SelfStar2.jl")
+include("AntiSelfStar2.jl")
 # include("Multivector3.jl")
 # include("SelfStar3.jl")
 # include("AntiSelfStar3.jl")
@@ -37,8 +37,11 @@ include("AntiSelfStar1.jl")
 # include("AntiSelfStar4.jl")
 
 export AbstractMultivector, AbstractMultivector1
-export Multivector1, dagger, star, selfstar, antiselfstar, ∧, iszerodivisor, crossratio, möbius
+export Multivector1, cloak, dagger, star, selfstar, antiselfstar, ∧, iszerodivisor, crossratio, möbius
 export SelfStar1
 export AntiSelfStar1
+export Multivector2, commutator, crossratioL, crossratioR, möbiusL, möbiusR
+export SelfStar2
+export AntiSelfStar2
 
 end

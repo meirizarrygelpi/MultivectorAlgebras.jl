@@ -38,13 +38,22 @@ function one{T <: Real}(::Type{AntiSelfStar1{T}})
 end
 
 """
-    conj(z::AntiSelfStar1)
+    conj{T <: Real}(z::AntiSelfStar1{T})
 
 Turns an anti-self-star-conjugate 1-dimensional multivector into an
 self-star-conjugate 1-dimensional multivector.
 This operation is an involution.
 """
 conj{T <: Real}(z::AntiSelfStar1{T}) = SelfStar1{T}(z.c)
+
+"""
+    cloak{T <: Real}(z::AntiSelfStar1{T})
+
+Turns an anti-self-star-conjugate 1-dimensional multivector into an
+self-star-conjugate 1-dimensional multivector.
+This operation is an involution.
+"""
+cloak{T <: Real}(z::AntiSelfStar1{T}) = SelfStar1{T}(-z.c)
 
 """
     dagger(z::AntiSelfStar1)

@@ -70,6 +70,19 @@ function conj{T <: Real}(z::Multivector1{T})
 end
 
 """
+    cloak{T <: Real}(z::Multivector1{T})
+
+The cloak conjugate changes the sign of even blades. If ``z=a+bW``, then `cloak(z)` gives
+```math
+    -a+bW
+```
+This operation is equivalent to `-conj(z)` and thus is also an involution.
+"""
+function cloak{T <: Real}(z::Multivector1{T})
+    Multivector1{T}(-z.l, z.r)
+end
+
+"""
     dagger{T <: Real}(z::Multivector1{T})
 
 The dagger conjugate changes the sign of odd blades. If ``z=a+bW``, then `dagger(z)` gives

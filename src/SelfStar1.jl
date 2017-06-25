@@ -44,6 +44,14 @@ anti-self-star-conjugate 1-dimensional multivector. This operation is an involut
 conj{T <: Real}(z::SelfStar1{T}) = AntiSelfStar1{T}(z.c)
 
 """
+    cloak(z::SelfStar1)
+
+Turns a self-star-conjugate 1-dimensional multivector into an
+anti-self-star-conjugate 1-dimensional multivector. This operation is an involution.
+"""
+cloak{T <: Real}(z::SelfStar1{T}) = AntiSelfStar1{T}(-z.c)
+
+"""
     dagger(z::SelfStar1)
 
 Turns a self-star-conjugate 1-dimensional multivector into an
