@@ -3,15 +3,15 @@
 
 A self-star-conjugate 1-dimensional multivector.
 """
-immutable SelfStar2{T <: Real} <: AbstractMultivector2{T}
+struct SelfStar2{T <: Real} <: AbstractMultivector2{T}
     c::T
 
-    SelfStar2{U <: Real}(c::U) = new(c)
+    SelfStar2{U}(c::U) where {U <: Real} = new(c)
 end
 
-SelfStar2{T <: Real}(c::T) = SelfStar2{T}(c)
+SelfStar2(c::T) where {T <: Real} = SelfStar2{T}(c)
 
-function Multivector2{T <: Real}(z::SelfStar2{T})
+function Multivector2(z::SelfStar2{T}) where {T <: Real}
     Multivector2{T}(z.c, zero(T), zero(T), z.c)
 end
 
@@ -21,19 +21,19 @@ function show(io::IO, z::SelfStar2)
     print(io, "]")
 end
 
-function zero{T <: Real}(z::SelfStar2{T})
+function zero(z::SelfStar2{T}) where {T <: Real}
     SelfStar2{T}(zero(z.c))
 end
 
-function zero{T <: Real}(::Type{SelfStar2{T}})
+function zero(::Type{SelfStar2{T}}) where {T <: Real}
     SelfStar2{T}(zero(T))
 end
 
-function one{T <: Real}(z::SelfStar2{T})
+function one(z::SelfStar2{T}) where {T <: Real}
     Multivector2(one(z.c), zero(z.c), zero(z.c), zero(z.c))
 end
 
-function one{T <: Real}(::Type{SelfStar2{T}})
+function one(::Type{SelfStar2{T}}) where {T <: Real}
     Multivector2(one(T), zero(T), zero(T), zero(T))
 end
 
@@ -43,9 +43,9 @@ end
 Turns a self-star-conjugate 2-dimensional multivector into an
 anti-self-star-conjugate 2-dimensional multivector. This operation is an involution.
 """
-conj{T <: Real}(z::SelfStar2{T}) = AntiSelfStar2{T}(z.c)
+conj(z::SelfStar2{T}) where {T <: Real} = AntiSelfStar2{T}(z.c)
 
-cloak{T <: Real}(z::SelfStar2{T}) = SelfStar2{T}(-z.c)
+cloak(z::SelfStar2{T}) where {T <: Real} = SelfStar2{T}(-z.c)
 
 dagger(z::SelfStar2) = z
 
@@ -83,7 +83,7 @@ function (+)(a::Real, z::SelfStar2)
 end
 
 # Unary -
-function (-){T <: Real}(z::SelfStar2{T})
+function (-)(z::SelfStar2{T}) where {T <: Real}
     SelfStar2{T}(-z.c)
 end
 

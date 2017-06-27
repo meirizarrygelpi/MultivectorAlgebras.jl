@@ -3,7 +3,7 @@
 
 An abstract 2-dimensional multivector.
 """
-abstract AbstractMultivector2{T <: Real} <: AbstractMultivector{T}
+abstract type AbstractMultivector2{T <: Real} <: AbstractMultivector{T} end
 
 """
     Multivector2{T <: Real} <: AbstractMultivector2{T}
@@ -19,30 +19,30 @@ where ``a``, ``b``, ``c``, and ``d`` are real (and of the same type),
 and ``W ∧ W = 0``, ``X ∧ X = 0``, and ``WX = W ∧ X = -X ∧ W``.
 Here ``∧`` is the wedge product.
 """
-immutable Multivector2{T <: Real} <: AbstractMultivector2{T}
+struct Multivector2{T <: Real} <: AbstractMultivector2{T}
     l::Multivector1{T}
     r::Multivector1{T}
 
-    Multivector2{U <: Real}(l::Multivector1{U}, r::Multivector1{U}) = new(l, r)
+    Multivector2{U}(l::Multivector1{U}, r::Multivector1{U}) where {U <: Real} = new(l, r)
 end
 
-function Multivector2{T <: Real}(x::Multivector1{T}, y::Multivector1{T})
+function Multivector2(x::Multivector1{T}, y::Multivector1{T}) where {T <: Real}
     Multivector2{T}(x, y)
 end
 
-function Multivector2{T <: Real}(a::T, b::T, c::T, d::T)
+function Multivector2(a::T, b::T, c::T, d::T) where {T <: Real}
     Multivector2{T}(Multivector1(a, b), Multivector1(c, d))
 end
 
-function Multivector2{T <: Real}(a::T, b::T, c::T)
+function Multivector2(a::T, b::T, c::T) where {T <: Real}
     Multivector2{T}(Multivector1(a, b), Multivector1(c, zero(T)))
 end
 
-function Multivector2{T <: Real}(a::T, b::T)
+function Multivector2(a::T, b::T) where {T <: Real}
     Multivector2{T}(Multivector1(a, b), zero(Multivector1{T}))
 end
 
-function Multivector2{T <: Real}(a::T)
+function Multivector2(a::T) where {T <: Real}
     Multivector2{T}(Multivector1(a, zero(T)), zero(Multivector1{T}))
 end
 
@@ -74,19 +74,19 @@ function show(io::IO, z::Multivector2)
     print(io, "]")
 end
 
-function zero{T <: Real}(z::Multivector2{T})
+function zero(z::Multivector2{T}) where {T <: Real}
     Multivector2{T}(zero(z.l), zero(z.r))
 end
 
-function zero{T <: Real}(::Type{Multivector2{T}})
+function zero(::Type{Multivector2{T}}) where {T <: Real}
     Multivector2{T}(zero(T), zero(T), zero(T), zero(T))
 end
 
-function one{T <: Real}(z::Multivector2{T})
+function one(z::Multivector2{T}) where {T <: Real}
     Multivector2{T}(one(z.l), zero(z.r))
 end
 
-function one{T <: Real}(::Type{Multivector2{T}})
+function one(::Type{Multivector2{T}}) where {T <: Real}
     Multivector2{T}(one(T), zero(T), zero(T), zero(T))
 end
 
@@ -99,7 +99,7 @@ The `Multivector2` conjugate. If ``z=a+bW+cX+dWX``, then `conj(z)` gives
 ```
 This operation is an involution.
 """
-function conj{T <: Real}(z::Multivector2{T})
+function conj(z::Multivector2{T}) where {T <: Real}
     Multivector2{T}(conj(z.l), -z.r)
 end
 
@@ -112,7 +112,7 @@ The cloak conjugate changes the sign of even blades. If ``z=a+bW+cX+dWX``, then 
 ```
 This operation is equivalent to `-dagger(z)` and thus is also an involution.
 """
-function cloak{T <: Real}(z::Multivector2{T})
+function cloak(z::Multivector2{T}) where {T <: Real}
     Multivector2{T}(cloak(z.l), dagger(z.r))
 end
 
@@ -125,7 +125,7 @@ The dagger conjugate changes the sign of odd blades. If ``z=a+bW+cX+dWX``, then 
 ```
 This operation is an involution.
 """
-function dagger{T <: Real}(z::Multivector2{T})
+function dagger(z::Multivector2{T}) where {T <: Real}
     Multivector2{T}(dagger(z.l), cloak(z.r))
 end
 
@@ -138,7 +138,7 @@ Returns the Hodge star conjugate. If ``z=a+bW+cX+dWX``, then `star(z)` gives
 ```
 This operation is an involution.
 """
-function star{T <: Real}(z::Multivector2{T})
+function star(z::Multivector2{T}) where {T <: Real}
     Multivector2{T}(dagger(star(z.r)), star(z.l))
 end
 
@@ -151,8 +151,8 @@ The self-star-conjugate part. If ``z=a+bW+cX+dWX``, then `selfstar(z)` gives
 ```
 The result is a `SelfStar2`. This operation is idempotent.
 """
-function selfstar{T <: Real}(z::Multivector2{T})
-    SelfStar2{T}((z.l.l + z.r.r)/2)
+function selfstar(z::Multivector2{T}) where {T <: Real}
+    SelfStar2{T}((z.l.l + z.r.r) / 2)
 end
 
 """
@@ -164,11 +164,11 @@ The anti-self-star-conjugate part. If ``z=a+bW+cX+dWX``, then `antiselfstar(z)` 
 ```
 The result is an `AntiSelfStar2`. This operation is idempotent.
 """
-function antiselfstar{T <: Real}(z::Multivector2{T})
-    AntiSelfStar2{T}((z.l.l - z.r.r)/2)
+function antiselfstar(z::Multivector2{T}) where {T <: Real}
+    AntiSelfStar2{T}((z.l.l - z.r.r) / 2)
 end
 
-(+){T <: Real}(z::Multivector2{T}) = z
+(+)(z::Multivector2{T}) where {T <: Real} = z
 
 function (+)(x::Multivector2, y::Multivector2)
     Multivector2(x.l + y.l, x.r + y.r)
@@ -190,7 +190,7 @@ function (+)(a::Real, z::Multivector2)
     Multivector2(z.l + a, z.r)
 end
 
-function (-){T <: Real}(z::Multivector2{T})
+function (-)(z::Multivector2{T}) where {T <: Real}
     Multivector2{T}(-z.l, -z.r)
 end
 
@@ -221,15 +221,15 @@ Wedge product of two 2-dimensional multivectors.
 """
 
 function (∧)(x::Multivector2, y::Multivector2)
-    Multivector2(x.l∧y.l,  (y.r∧x.l) + (x.r∧conj(y.l)))
+    Multivector2(x.l ∧ y.l,  (y.r ∧ x.l) + (x.r ∧ conj(y.l)))
 end
 
 function (∧)(x::Multivector2, y::Multivector1)
-    Multivector2(x.l∧y, x.r∧conj(y))
+    Multivector2(x.l ∧ y, x.r ∧ conj(y))
 end
 
 function (∧)(x::Multivector1, y::Multivector2)
-    Multivector2(x∧y.l,  y.r∧x)
+    Multivector2(x ∧ y.l,  y.r ∧ x)
 end
 
 """
@@ -239,11 +239,11 @@ end
 Scaling and/or reflection of a `Multivector1` by a real number.
 """
 function (*)(z::Multivector2, a::Real)
-    Multivector2(z.l*a, z.r*a)
+    Multivector2(z.l * a, z.r * a)
 end
 
 function (*)(a::Real, z::Multivector2)
-    Multivector2(z.l*a, z.r*a)
+    Multivector2(z.l * a, z.r * a)
 end
 
 function (∧)(z::AbstractMultivector2, a::Real)
@@ -273,7 +273,7 @@ abs2(z::Multivector2) = z.l^2
 
 Returns true if `z` is of the form ``bW+cX+dWX`` such that ``z ∧ conj(z) = 0``.
 """
-iszerodivisor{T <: Real}(z::Multivector2{T}) = iszerodivisor(z.l)
+iszerodivisor(z::Multivector2{T}) where {T <: Real} = iszerodivisor(z.l)
 
 """
     inv(z::Multivector2)
@@ -352,7 +352,7 @@ function crossratioL(w::AbstractMultivector2,
                      x::AbstractMultivector2,
                      y::AbstractMultivector2,
                      z::AbstractMultivector2)
-    inv(x-y) ∧ (w-y) ∧ inv(w-z) ∧ (x-z)
+    inv(x - y) ∧ (w - y) ∧ inv(w - z) ∧ (x - z)
 end
 
 """
@@ -371,7 +371,7 @@ function crossratioR(w::AbstractMultivector2,
                      x::AbstractMultivector2,
                      y::AbstractMultivector2,
                      z::AbstractMultivector2)
-    (w-y) ∧ inv(x-y) ∧ (x-z) ∧ inv(w-z)
+    (w - y) ∧ inv(x - y) ∧ (x - z) ∧ inv(w - z)
 end
 
 """
@@ -397,7 +397,7 @@ function möbiusL(z::AbstractMultivector2,
 end
 
 function möbiusL(z::AbstractMultivector2, a::Real, b::Real, c::Real, d::Real)
-     inv((c * z) + d) ∧ ((a * z) + b)
+    inv((c * z) + d) ∧ ((a * z) + b)
 end
 
 """

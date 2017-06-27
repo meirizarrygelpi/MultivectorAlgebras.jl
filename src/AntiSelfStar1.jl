@@ -3,15 +3,15 @@
 
 An anti-self-star-conjugate 1-dimensional multivector.
 """
-immutable AntiSelfStar1{T <: Real} <: AbstractMultivector1{T}
+struct AntiSelfStar1{T <: Real} <: AbstractMultivector1{T}
     c::T
 
-    AntiSelfStar1{U <: Real}(c::U) = new(c)
+    AntiSelfStar1{U}(c::U) where {U <: Real} = new(c)
 end
 
-AntiSelfStar1{T <: Real}(c::T) = AntiSelfStar1{T}(c)
+AntiSelfStar1(c::T) where {T <: Real} = AntiSelfStar1{T}(c)
 
-function Multivector1{T<:Real}(z::AntiSelfStar1{T})
+function Multivector1(z::AntiSelfStar1{T}) where {T <: Real}
     Multivector1{T}(z.c, -z.c)
 end
 
@@ -21,19 +21,19 @@ function show(io::IO, z::AntiSelfStar1)
     print(io, "]")
 end
 
-function zero{T <: Real}(z::AntiSelfStar1{T})
+function zero(z::AntiSelfStar1{T}) where {T <: Real}
     AntiSelfStar1(zero(z.c))
 end
 
-function zero{T <: Real}(::Type{AntiSelfStar1{T}})
+function zero(::Type{AntiSelfStar1{T}}) where {T <: Real}
     AntiSelfStar1(zero(T))
 end
 
-function one{T <: Real}(z::AntiSelfStar1{T})
+function one(z::AntiSelfStar1{T}) where {T <: Real}
     Multivector1(one(z.c), zero(z.c))
 end
 
-function one{T <: Real}(::Type{AntiSelfStar1{T}})
+function one(::Type{AntiSelfStar1{T}}) where {T <: Real}
     Multivector1(one(T), zero(T))
 end
 
@@ -44,7 +44,7 @@ Turns an anti-self-star-conjugate 1-dimensional multivector into an
 self-star-conjugate 1-dimensional multivector.
 This operation is an involution.
 """
-conj{T <: Real}(z::AntiSelfStar1{T}) = SelfStar1{T}(z.c)
+conj(z::AntiSelfStar1{T}) where {T <: Real} = SelfStar1{T}(z.c)
 
 """
     cloak{T <: Real}(z::AntiSelfStar1{T})
@@ -53,7 +53,7 @@ Turns an anti-self-star-conjugate 1-dimensional multivector into an
 self-star-conjugate 1-dimensional multivector.
 This operation is an involution.
 """
-cloak{T <: Real}(z::AntiSelfStar1{T}) = SelfStar1{T}(-z.c)
+cloak(z::AntiSelfStar1{T}) where {T <: Real} = SelfStar1{T}(-z.c)
 
 """
     dagger(z::AntiSelfStar1)
@@ -93,7 +93,7 @@ function (+)(a::Real, z::AntiSelfStar1)
     Multivector1(z.c + a, -z.c)
 end
 
-function (-){T <: Real}(z::AntiSelfStar1{T})
+function (-)(z::AntiSelfStar1{T}) where {T <: Real}
     AntiSelfStar1{T}(-z.c)
 end
 
@@ -123,11 +123,11 @@ function (∧)(x::AntiSelfStar1, y::AntiSelfStar1)
 end
 
 function (∧)(x::AntiSelfStar1, y::Multivector1)
-    Multivector1(x.c*y.l, x.c*(y.r - y.l))
+    Multivector1(x.c * y.l, x.c * (y.r - y.l))
 end
 
 function (∧)(x::Multivector1, y::AntiSelfStar1)
-    Multivector1(y.c*x.l, y.c*(x.r - x.l))
+    Multivector1(y.c * x.l, y.c * (x.r - x.l))
 end
 
 function (∧)(x::SelfStar1, y::AntiSelfStar1)

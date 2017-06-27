@@ -3,15 +3,15 @@
 
 A self-star-conjugate 1-dimensional multivector.
 """
-immutable SelfStar1{T <: Real} <: AbstractMultivector1{T}
+struct SelfStar1{T <: Real} <: AbstractMultivector1{T}
     c::T
 
-    SelfStar1{U <: Real}(c::U) = new(c)
+    SelfStar1{U}(c::U) where {U <: Real} = new(c)
 end
 
-SelfStar1{T <: Real}(c::T) = SelfStar1{T}(c)
+SelfStar1(c::T) where {T <: Real} = SelfStar1{T}(c)
 
-Multivector1{T <: Real}(z::SelfStar1{T}) = Multivector1{T}(z.c, z.c)
+Multivector1(z::SelfStar1{T}) where {T <: Real} = Multivector1{T}(z.c, z.c)
 
 function show(io::IO, z::SelfStar1)
     print(io, "[(1+W): ")
@@ -19,19 +19,19 @@ function show(io::IO, z::SelfStar1)
     print(io, "]")
 end
 
-function zero{T <: Real}(z::SelfStar1{T})
+function zero(z::SelfStar1{T}) where {T <: Real}
     SelfStar1{T}(zero(z.c))
 end
 
-function zero{T <: Real}(::Type{SelfStar1{T}})
+function zero(::Type{SelfStar1{T}}) where {T <: Real}
     SelfStar1{T}(zero(T))
 end
 
-function one{T <: Real}(z::SelfStar1{T})
+function one(z::SelfStar1{T}) where {T <: Real}
     Multivector1{T}(one(z.c), zero(z.c))
 end
 
-function one{T <: Real}(::Type{SelfStar1{T}})
+function one(::Type{SelfStar1{T}}) where {T <: Real}
     Multivector1{T}(one(T), zero(T))
 end
 
@@ -41,7 +41,7 @@ end
 Turns a self-star-conjugate 1-dimensional multivector into an
 anti-self-star-conjugate 1-dimensional multivector. This operation is an involution.
 """
-conj{T <: Real}(z::SelfStar1{T}) = AntiSelfStar1{T}(z.c)
+conj(z::SelfStar1{T}) where {T <: Real} = AntiSelfStar1{T}(z.c)
 
 """
     cloak(z::SelfStar1)
@@ -49,7 +49,7 @@ conj{T <: Real}(z::SelfStar1{T}) = AntiSelfStar1{T}(z.c)
 Turns a self-star-conjugate 1-dimensional multivector into an
 anti-self-star-conjugate 1-dimensional multivector. This operation is an involution.
 """
-cloak{T <: Real}(z::SelfStar1{T}) = AntiSelfStar1{T}(-z.c)
+cloak(z::SelfStar1{T}) where {T <: Real} = AntiSelfStar1{T}(-z.c)
 
 """
     dagger(z::SelfStar1)
@@ -93,7 +93,7 @@ function (+)(a::Real, z::SelfStar1)
 end
 
 # Unary -
-function (-){T <: Real}(z::SelfStar1{T})
+function (-)(z::SelfStar1{T}) where {T <: Real}
     SelfStar1{T}(-z.c)
 end
 

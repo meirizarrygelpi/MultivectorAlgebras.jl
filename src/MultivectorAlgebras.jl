@@ -21,7 +21,7 @@ const ZeroDivisorDenominator = "denominator is zero divisor"
 
 An abstract low-dimensional multivector.
 """
-abstract AbstractMultivector{T <: Real} <: Number
+abstract type AbstractMultivector{T <: Real} <: Number end
 
 include("Multivector1.jl")
 include("SelfStar1.jl")

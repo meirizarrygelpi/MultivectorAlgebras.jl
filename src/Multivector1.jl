@@ -3,7 +3,7 @@
 
 An abstract 1-dimensional multivector.
 """
-abstract AbstractMultivector1{T <: Real} <: AbstractMultivector{T}
+abstract type AbstractMultivector1{T <: Real} <: AbstractMultivector{T} end
 
 """
     Multivector1{T <: Real} <: AbstractMultivector1{T}
@@ -21,16 +21,16 @@ Here ``∧`` is the wedge product. Note that
 ```
 which, in general, is not equal to zero.
 """
-immutable Multivector1{T <: Real} <: AbstractMultivector1{T}
+struct Multivector1{T <: Real} <: AbstractMultivector1{T}
     l::T
     r::T
 
-    Multivector1{U <: Real}(l::U, r::U) = new(l, r)
+    Multivector1{U}(l::U, r::U) where {U <: Real} = new(l, r)
 end
 
-Multivector1{T <: Real}(a::T, b::T) = Multivector1{T}(a, b)
+Multivector1(a::T, b::T) where {T <: Real} = Multivector1{T}(a, b)
 Multivector1(a::Real, b::Real) = Multivector1(promote(a, b)...)
-Multivector1{T <: Real}(a::T) = Multivector1{T}(a, zero(T))
+Multivector1(a::T) where {T <: Real} = Multivector1{T}(a, zero(T))
 
 function show(io::IO, z::Multivector1)
     print(io, "[1: ")
@@ -40,19 +40,19 @@ function show(io::IO, z::Multivector1)
     print(io, "]")
 end
 
-function zero{T <: Real}(z::Multivector1{T})
+function zero(z::Multivector1{T}) where {T <: Real}
     Multivector1{T}(zero(z.l), zero(z.r))
 end
 
-function zero{T <: Real}(::Type{Multivector1{T}})
+function zero(::Type{Multivector1{T}}) where {T <: Real}
     Multivector1{T}(zero(T), zero(T))
 end
 
-function one{T <: Real}(z::Multivector1{T})
+function one(z::Multivector1{T}) where {T <: Real}
     Multivector1{T}(one(z.l), zero(z.r))
 end
 
-function one{T <: Real}(::Type{Multivector1{T}})
+function one(::Type{Multivector1{T}}) where {T <: Real}
     Multivector1{T}(one(T), zero(T))
 end
 
@@ -65,7 +65,7 @@ The `Multivector1` conjugate. If ``z=a+bW``, then `conj(z)` gives
 ```
 This operation is an involution.
 """
-function conj{T <: Real}(z::Multivector1{T})
+function conj(z::Multivector1{T}) where {T <: Real}
     Multivector1{T}(z.l, -z.r)
 end
 
@@ -78,7 +78,7 @@ The cloak conjugate changes the sign of even blades. If ``z=a+bW``, then `cloak(
 ```
 This operation is equivalent to `-conj(z)` and thus is also an involution.
 """
-function cloak{T <: Real}(z::Multivector1{T})
+function cloak(z::Multivector1{T}) where {T <: Real}
     Multivector1{T}(-z.l, z.r)
 end
 
@@ -104,7 +104,7 @@ Returns the Hodge star conjugate. If ``z=a+bW``, then `star(z)` gives
 ```
 This operation is an involution.
 """
-function star{T <: Real}(z::Multivector1{T})
+function star(z::Multivector1{T}) where {T <: Real}
     Multivector1{T}(z.r, z.l)
 end
 
@@ -117,8 +117,8 @@ The self-star-conjugate part. If ``z=a+bW``, then `selfstar(z)` gives
 ```
 The result is a `SelfStar1`. This operation is idempotent.
 """
-function selfstar{T <: Real}(z::Multivector1{T})
-    SelfStar1{T}((z.l + z.r)/2)
+function selfstar(z::Multivector1{T}) where {T <: Real}
+    SelfStar1{T}((z.l + z.r) / 2)
 end
 
 """
@@ -130,11 +130,11 @@ The anti-self-star-conjugate part. If ``z=a+bW``, then `antiselfstar(z)` gives
 ```
 The result is an `AntiSelfStar1`. This operation is idempotent.
 """
-function antiselfstar{T <: Real}(z::Multivector1{T})
-    AntiSelfStar1{T}((z.l - z.r)/2)
+function antiselfstar(z::Multivector1{T}) where {T <: Real}
+    AntiSelfStar1{T}((z.l - z.r) / 2)
 end
 
-(+){T <: Real}(z::Multivector1{T}) = z
+(+)(z::Multivector1{T}) where {T <: Real} = z
 
 function (+)(x::Multivector1, y::Multivector1)
     Multivector1(x.l + y.l, x.r + y.r)
@@ -148,7 +148,7 @@ function (+)(a::Real, z::Multivector1)
     Multivector1(z.l + a, z.r)
 end
 
-function (-){T <: Real}(z::Multivector1{T})
+function (-)(z::Multivector1{T}) where {T <: Real}
     Multivector1{T}(-z.l, -z.r)
 end
 
@@ -171,7 +171,7 @@ Wedge product of two 1-dimensional multivectors.
 """
 
 function (∧)(x::Multivector1, y::Multivector1)
-    Multivector1(x.l*y.l, x.r*y.l + y.r*x.l)
+    Multivector1(x.l * y.l, (x.r * y.l) + (y.r * x.l))
 end
 
 """
@@ -181,11 +181,11 @@ end
 Scaling and/or reflection of a `Multivector1` by a real number.
 """
 function (*)(z::Multivector1, a::Real)
-    Multivector1(z.l*a, z.r*a)
+    Multivector1(z.l * a, z.r * a)
 end
 
 function (*)(a::Real, z::Multivector1)
-    Multivector1(z.l*a, z.r*a)
+    Multivector1(z.l * a, z.r * a)
 end
 
 function (∧)(z::AbstractMultivector1, a::Real)
@@ -212,7 +212,7 @@ abs2(z::Multivector1) = z.l^2
 Returns true if `z` is of the form ``bW`` such that ``z ∧ conj(z) = 0``.
 Note that it follows that also ``z ∧ z = 0``.
 """
-iszerodivisor{T <: Real}(z::Multivector1{T}) = z.l == zero(T)
+iszerodivisor(z::Multivector1{T}) where {T <: Real} = z.l == zero(T)
 
 """
     inv(z::Multivector1)
@@ -232,7 +232,7 @@ function (/)(x::Multivector1, y::Multivector1)
         error(ZeroDivisorDenominator)
     end
 
-    Multivector1(x.l*y.l, x.r*y.l - y.r*x.l) / abs2(y)
+    Multivector1(x.l * y.l, (x.r * y.l) - (y.r * x.l)) / abs2(y)
 end
 
 function (/)(a::Real, z::Multivector1)
@@ -256,7 +256,7 @@ function (\)(y::Multivector1, x::Multivector1)
         error(ZeroDivisorDenominator)
     end
 
-    Multivector1(x.l*y.l, x.r*y.l - y.r*x.l) / abs2(y)
+    Multivector1(x.l * y.l, (x.r * y.l) - (y.r * x.l)) / abs2(y)
 end
 
 function (\)(z::Multivector1, a::Real)
@@ -291,7 +291,7 @@ function crossratio(w::AbstractMultivector1,
                     x::AbstractMultivector1,
                     y::AbstractMultivector1,
                     z::AbstractMultivector1)
-    inv(x-y) ∧ (w-y) ∧ inv(w-z) ∧ (x-z)
+    inv(x - y) ∧ (w - y) ∧ inv(w - z) ∧ (x - z)
 end
 
 """

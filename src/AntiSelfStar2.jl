@@ -3,15 +3,15 @@
 
 An anti-self-star-conjugate 1-dimensional multivector.
 """
-immutable AntiSelfStar2{T <: Real} <: AbstractMultivector2{T}
+struct AntiSelfStar2{T <: Real} <: AbstractMultivector2{T}
     c::T
 
-    AntiSelfStar2{U <: Real}(c::U) = new(c)
+    AntiSelfStar2{U}(c::U) where {U <: Real} = new(c)
 end
 
-AntiSelfStar2{T <: Real}(c::T) = AntiSelfStar2{T}(c)
+AntiSelfStar2(c::T) where {T <: Real} = AntiSelfStar2{T}(c)
 
-function Multivector2{T<:Real}(z::AntiSelfStar2{T})
+function Multivector2(z::AntiSelfStar2{T}) where {T <: Real}
     Multivector2{T}(z.c, zero(T), zero(T), -z.c)
 end
 
@@ -21,19 +21,19 @@ function show(io::IO, z::AntiSelfStar2)
     print(io, "]")
 end
 
-function zero{T <: Real}(z::AntiSelfStar2{T})
+function zero(z::AntiSelfStar2{T}) where {T <: Real}
     AntiSelfStar2(zero(z.c))
 end
 
-function zero{T <: Real}(::Type{AntiSelfStar2{T}})
+function zero(::Type{AntiSelfStar2{T}}) where {T <: Real}
     AntiSelfStar2(zero(T))
 end
 
-function one{T <: Real}(z::AntiSelfStar2{T})
+function one(z::AntiSelfStar2{T}) where {T <: Real}
     Multivector2(one(z.c), zero(z.c), zero(z.c), zero(z.c))
 end
 
-function one{T <: Real}(::Type{AntiSelfStar2{T}})
+function one(::Type{AntiSelfStar2{T}}) where {T <: Real}
     Multivector2(one(T), zero(T), zero(T), zero(T))
 end
 
@@ -44,9 +44,9 @@ Turns an anti-self-star-conjugate 2-dimensional multivector into an
 self-star-conjugate 2-dimensional multivector.
 This operation is an involution.
 """
-conj{T <: Real}(z::AntiSelfStar2{T}) = SelfStar2{T}(z.c)
+conj(z::AntiSelfStar2{T}) where {T <: Real} = SelfStar2{T}(z.c)
 
-cloak{T <: Real}(z::AntiSelfStar2{T}) = AntiSelfStar2{T}(-z.c)
+cloak(z::AntiSelfStar2{T}) where {T <: Real} = AntiSelfStar2{T}(-z.c)
 
 dagger(z::AntiSelfStar2) = z
 
@@ -79,7 +79,7 @@ function (+)(a::Real, z::AntiSelfStar2)
     Multivector2(z.c + a, zero(a), zero(a), -z.c)
 end
 
-function (-){T <: Real}(z::AntiSelfStar2{T})
+function (-)(z::AntiSelfStar2{T}) where {T <: Real}
     AntiSelfStar2{T}(-z.c)
 end
 
@@ -109,11 +109,11 @@ function (∧)(x::AntiSelfStar2, y::AntiSelfStar2)
 end
 
 function (∧)(x::AntiSelfStar2, y::Multivector2)
-    Multivector2(x.c*y.l.l, zero(x.c), zero(x.c), x.c*(y.r.r - y.l.l))
+    Multivector2(x.c * y.l.l, zero(x.c), zero(x.c), x.c * (y.r.r - y.l.l))
 end
 
 function (∧)(x::Multivector2, y::AntiSelfStar2)
-    Multivector2(y.c*x.l.l, zero(x.c), zero(x.c), y.c*(x.r.r - x.l.l))
+    Multivector2(x.l.l * y.c, zero(y.c), zero(y.c), (x.r.r - x.l.l) * y.c)
 end
 
 function (∧)(x::SelfStar2, y::AntiSelfStar2)
