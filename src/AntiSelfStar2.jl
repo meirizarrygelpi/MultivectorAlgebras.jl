@@ -21,6 +21,14 @@ function show(io::IO, z::AntiSelfStar2)
     print(io, "]")
 end
 
+function real(z::AntiSelfStar2)
+    z.c
+end
+
+function unreal(z::AntiSelfStar2)
+    vcat(zero(z.c), zero(z.c), -z.c)
+end
+
 function zero(z::AntiSelfStar2{T}) where {T <: Real}
     AntiSelfStar2(zero(z.c))
 end

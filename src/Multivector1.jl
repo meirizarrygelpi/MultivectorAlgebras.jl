@@ -40,6 +40,22 @@ function show(io::IO, z::Multivector1)
     print(io, "]")
 end
 
+function real(z::Multivector1)
+    z.l
+end
+
+function unreal(z::Multivector1)
+    z.r
+end
+
+function isreal(z::AbstractMultivector)
+    iszero(unreal(z))
+end
+
+function asarray(z::AbstractMultivector)
+    vcat(real(z), unreal(z))
+end
+
 function zero(z::Multivector1{T}) where {T <: Real}
     Multivector1{T}(zero(z.l), zero(z.r))
 end

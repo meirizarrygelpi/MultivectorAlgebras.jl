@@ -13,12 +13,12 @@ Three concrete types are implemented:
 1. `Multivector1`: a 1-dimensional multivector, with 2 real components
 1. `SelfStar1`: a 1-dimensional self-star-conjugate multivector, with 1 real component
 1. `AntiSelfStar1`: a 1-dimensional anti-self-star-conjugate multivector, with 1 real component
-
-Future concrete types are:
-
 1. `Multivector2`: a 2-dimensional multivector, with 4 real components
 1. `SelfStar2`: a 2-dimensional self-star-conjugate multivector, with 1 real component
 1. `AntiSelfStar2`: a 2-dimensional anti-self-star-conjugate multivector, with 1 real component
+
+Future concrete types are:
+
 1. `Multivector3`: a 3-dimensional multivector, with 8 real components
 1. `SelfStar3`: a 3-dimensional self-star-conjugate multivector, with 4 real components
 1. `AntiSelfStar3`: a 3-dimensional anti-self-star-conjugate multivector, with 4 real components

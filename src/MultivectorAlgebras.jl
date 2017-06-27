@@ -37,7 +37,7 @@ include("AntiSelfStar2.jl")
 # include("AntiSelfStar4.jl")
 
 export AbstractMultivector, AbstractMultivector1
-export Multivector1, cloak, dagger, star, selfstar, antiselfstar, ∧, iszerodivisor, crossratio, möbius
+export Multivector1, unreal, asarray, cloak, dagger, star, selfstar, antiselfstar, ∧, iszerodivisor, crossratio, möbius
 export SelfStar1
 export AntiSelfStar1
 export Multivector2, commutator, crossratioL, crossratioR, möbiusL, möbiusR

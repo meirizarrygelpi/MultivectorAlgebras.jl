@@ -19,6 +19,14 @@ function show(io::IO, z::SelfStar1)
     print(io, "]")
 end
 
+function real(z::SelfStar1)
+    z.c
+end
+
+function unreal(z::SelfStar1)
+    z.c
+end
+
 function zero(z::SelfStar1{T}) where {T <: Real}
     SelfStar1{T}(zero(z.c))
 end
