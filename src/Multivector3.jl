@@ -207,34 +207,6 @@ function star(z::Multivector3{T}) where {T <: Real}
     Multivector3{T}(dagger(star(z.r)), star(z.l))
 end
 
-"""
-    selfstar{T <: Real}(z::Multivector3{T})
-
-The self-star-conjugate part. If ``z=a+bW+cX+dWX+fY+gWY+hXY+j(WX)Y``, then `selfstar(z)` gives
-```math
-    \\frac{1}{2}(a+j)(1+(WX)Y) + \\frac{1}{2}(b+h)(W+XY) + \\frac{1}{2}(c-g)(X-WY) + \\frac{1}{2}(d+f)(WX+Y)
-```
-This operation is idempotent.
-"""
-function selfstar(z::Multivector3{T}) where {T <: Real}
-    (z + star(z)) / 2
-end
-
-"""
-    antiselfstar{T <: Real}(z::Multivector3{T})
-
-The anti-self-star-conjugate part. If ``z=a+bW+cX+dWX``, then `antiselfstar(z)` gives
-```math
-    \\frac{1}{2}(a-j)(1-(WX)Y) + \\frac{1}{2}(b-h)(W-XY) + \\frac{1}{2}(c+g)(X+WY) + \\frac{1}{2}(d-f)(WX-Y)
-```
-This operation is idempotent.
-"""
-function antiselfstar(z::Multivector3{T}) where {T <: Real}
-    (z - star(z)) / 2
-end
-
-(+)(z::Multivector3{T}) where {T <: Real} = z
-
 function (+)(x::Multivector3, y::Multivector3)
     Multivector3(x.l + y.l, x.r + y.r)
 end

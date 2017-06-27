@@ -118,32 +118,26 @@ function star(z::Multivector1{T}) where {T <: Real}
 end
 
 """
-    selfstar{T <: Real}(z::Multivector1{T})
+    selfstar(z::AbstractMultivector)
 
-The self-star-conjugate part. If ``z=a+bW``, then `selfstar(z)` gives
-```math
-    \\frac{1}{2}(a+b)(1+W)
-```
-The result is a `SelfStar1`. This operation is idempotent.
+The self-star-conjugate part.
+In odd number of dimensions, this operation is idempotent.
 """
-function selfstar(z::Multivector1{T}) where {T <: Real}
+function selfstar(z::AbstractMultivector)
     (z + star(z)) / 2
 end
 
 """
-    antiselfstar{T <: Real}(z::Multivector1{T})
+    antiselfstar(z::AbstractMultivector)
 
-The anti-self-star-conjugate part. If ``z=a+bW``, then `antiselfstar(z)` gives
-```math
-    \\frac{1}{2}(a-b)(1-W)
-```
-This operation is idempotent.
+The anti-self-star-conjugate part.
+In odd number of dimensions, this operation is idempotent.
 """
-function antiselfstar(z::Multivector1{T}) where {T <: Real}
+function antiselfstar(z::AbstractMultivector)
     (z - star(z)) / 2
 end
 
-(+)(z::Multivector1{T}) where {T <: Real} = z
+(+)(z::AbstractMultivector{T}) where {T <: Real} = z
 
 function (+)(x::Multivector1, y::Multivector1)
     Multivector1(x.l + y.l, x.r + y.r)
@@ -274,49 +268,4 @@ function (\)(a::Real, z::Multivector1)
     end
     
     Multivector1(z.l / a, z.r / a)
-end
-
-"""
-    crossratio(w::Multivector1,
-               x::Multivector1,
-               y::Multivector1,
-               z::Multivector1)
-
-The cross-ratio:
-```math
-    \\frac{(w-y)(x-z)}{(x-y)(w-z)}
-```
-The cross-ratio is invariant under Möbius transformations.
-"""
-function crossratio(w::Multivector1,
-                    x::Multivector1,
-                    y::Multivector1,
-                    z::Multivector1)
-    inv(x - y) * (w - y) * inv(w - z) * (x - z)
-end
-
-"""
-    möbius(z::Multivector1,
-           a::Multivector1,
-           b::Multivector1,
-           c::Multivector1,
-           d::Multivector1)
-    möbius(z::Multivector1, a::Real, b::Real, c::Real, d::Real)
-
-The Möbius transformation:
-```math
-    \\frac{az + b}{cz + d}
-```
-This transformation is also know as a fractional linear transformation.
-"""
-function möbius(z::Multivector1,
-                a::Multivector1,
-                b::Multivector1,
-                c::Multivector1,
-                d::Multivector1)
-    ((a * z) + b) * inv((c * z) + d)
-end
-
-function möbius(z::Multivector1, a::Real, b::Real, c::Real, d::Real)
-    ((a * z) + b) * inv((c * z) + d)
 end
