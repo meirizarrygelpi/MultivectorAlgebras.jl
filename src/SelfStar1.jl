@@ -154,7 +154,7 @@ abs(z::SelfStar1) = abs(z.c)
 abs2(z::SelfStar1) = z.c^2
 
 function inv(z::SelfStar1)
-    if z.c == zero(z.c)
+    if iszero(z.c)
         error(ZeroInverse)
     end
 
@@ -162,7 +162,7 @@ function inv(z::SelfStar1)
 end
 
 function (/)(x::SelfStar1, y::SelfStar1)
-    if y.c == zero(y.c)
+    if iszero(y.c)
         error(ZeroDenominator)
     end
 
@@ -170,7 +170,7 @@ function (/)(x::SelfStar1, y::SelfStar1)
 end
 
 function (/)(a::Real, z::SelfStar1)
-    if z.c == zero(z.c)
+    if iszero(z.c)
         error(ZeroDenominator)
     end
 
@@ -178,7 +178,7 @@ function (/)(a::Real, z::SelfStar1)
 end
 
 function (/)(z::SelfStar1, a::Real)
-    if a == zero(a)
+    if iszero(a)
         error(ZeroDenominator)
     end
 
@@ -186,7 +186,7 @@ function (/)(z::SelfStar1, a::Real)
 end
 
 function (\)(y::SelfStar1, x::SelfStar1)
-    if y.c == zero(y.c)
+    if iszero(y.c)
         error(ZeroDenominator)
     end
 
@@ -194,7 +194,7 @@ function (\)(y::SelfStar1, x::SelfStar1)
 end
 
 function (\)(z::SelfStar1, a::Real)
-    if z.c == zero(z.c)
+    if iszero(z.c)
         error(ZeroDenominator)
     end
 
@@ -202,7 +202,7 @@ function (\)(z::SelfStar1, a::Real)
 end
 
 function (\)(a::Real, z::SelfStar1)
-    if a == zero(a)
+    if iszero(a)
         error(ZeroDenominator)
     end
     

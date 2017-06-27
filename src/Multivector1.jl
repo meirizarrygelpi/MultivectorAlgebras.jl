@@ -212,7 +212,7 @@ abs2(z::Multivector1) = z.l^2
 Returns true if `z` is of the form ``bW`` such that ``z ∧ conj(z) = 0``.
 Note that it follows that also ``z ∧ z = 0``.
 """
-iszerodivisor(z::Multivector1{T}) where {T <: Real} = z.l == zero(T)
+iszerodivisor(z::Multivector1{T}) where {T <: Real} = iszero(z.l)
 
 """
     inv(z::Multivector1)
@@ -244,7 +244,7 @@ function (/)(a::Real, z::Multivector1)
 end
 
 function (/)(z::Multivector1, a::Real)
-    if a == zero(a)
+    if iszero(a)
         error(ZeroDenominator)
     end
 
@@ -268,7 +268,7 @@ function (\)(z::Multivector1, a::Real)
 end
 
 function (\)(a::Real, z::Multivector1)
-    if a == zero(a)
+    if iszero(a)
         error(ZeroDenominator)
     end
     

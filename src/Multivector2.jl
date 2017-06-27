@@ -305,7 +305,7 @@ function (/)(a::Real, z::Multivector2)
 end
 
 function (/)(z::Multivector2, a::Real)
-    if a == zero(a)
+    if iszero(a)
         error(ZeroDenominator)
     end
 
@@ -329,7 +329,7 @@ function (\)(z::Multivector2, a::Real)
 end
 
 function (\)(a::Real, z::Multivector2)
-    if a == zero(a)
+    if iszero(a)
         error(ZeroDenominator)
     end
     
