@@ -29,19 +29,16 @@ include("AntiSelfStar1.jl")
 include("Multivector2.jl")
 include("SelfStar2.jl")
 include("AntiSelfStar2.jl")
-# include("Multivector3.jl")
-# include("SelfStar3.jl")
-# include("AntiSelfStar3.jl")
+include("Multivector3.jl")
 # include("Multivector4.jl")
-# include("SelfStar4.jl")
-# include("AntiSelfStar4.jl")
 
-export AbstractMultivector, AbstractMultivector1
+export AbstractMultivector, AbstractMultivector1, AbstractMultivector2, AbstractMultivector3
 export Multivector1, unreal, asarray, cloak, dagger, star, selfstar, antiselfstar, ∧, iszerodivisor, crossratio, möbius
 export SelfStar1
 export AntiSelfStar1
 export Multivector2, commutator, crossratioL, crossratioR, möbiusL, möbiusR
 export SelfStar2
 export AntiSelfStar2
+export Multivector3, associator
 
 end

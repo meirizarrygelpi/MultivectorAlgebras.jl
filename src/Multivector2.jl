@@ -30,6 +30,10 @@ function Multivector2(x::Multivector1{T}, y::Multivector1{T}) where {T <: Real}
     Multivector2{T}(x, y)
 end
 
+function Multivector2(z::Multivector1)
+    Multivector2(z, zero(z))
+end
+
 function Multivector2(a::T, b::T, c::T, d::T) where {T <: Real}
     Multivector2{T}(Multivector1(a, b), Multivector1(c, d))
 end
@@ -262,7 +266,7 @@ function (∧)(a::Real, z::AbstractMultivector2)
     a * z
 end
 
-function commutator(x::AbstractMultivector2, y::AbstractMultivector2)
+function commutator(x::AbstractMultivector, y::AbstractMultivector)
     (x ∧ y) - (y ∧ x)
 end
 
@@ -274,7 +278,7 @@ abs(z::Multivector2) = abs(z.l)
 """
     abs2(z::Multivector2)
 """
-abs2(z::Multivector2) = z.l^2
+abs2(z::Multivector2) = abs2(z.l)
 
 """
     iszerodivisor(z::Multivector2)
