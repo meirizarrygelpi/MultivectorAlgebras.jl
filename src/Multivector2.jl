@@ -1,12 +1,5 @@
 """
-    AbstractMultivector2{T <: Real} <: AbstractMultivector{T}
-
-An abstract 2-dimensional multivector.
-"""
-abstract type AbstractMultivector2{T <: Real} <: AbstractMultivector{T} end
-
-"""
-    Multivector2{T <: Real} <: AbstractMultivector2{T}
+    Multivector2{T <: Real} <: AbstractMultivector{T}
 
 An immutable pair of pairs of real numbers that represents a member
 of a 2-dimensional multivector algebra.
@@ -16,10 +9,10 @@ Each `Multivector2` has the form
     a+bW+cX+dWX
 ```
 where ``a``, ``b``, ``c``, and ``d`` are real (and of the same type),
-and ``W ∧ W = 0``, ``X ∧ X = 0``, and ``WX = W ∧ X = -X ∧ W``.
-Here ``∧`` is the wedge product.
+and ``W * W = 0``, ``X * X = 0``, and ``WX = W * X = -X * W``.
+Here ``*`` is the wedge product.
 """
-struct Multivector2{T <: Real} <: AbstractMultivector2{T}
+struct Multivector2{T <: Real} <: AbstractMultivector{T}
     l::Multivector1{T}
     r::Multivector1{T}
 
@@ -161,10 +154,10 @@ The self-star-conjugate part. If ``z=a+bW+cX+dWX``, then `selfstar(z)` gives
 ```math
     \\frac{1}{2}(a+d)(1+WX)
 ```
-The result is a `SelfStar2`. This operation is idempotent.
+This operation is not idempotent.
 """
 function selfstar(z::Multivector2{T}) where {T <: Real}
-    SelfStar2{T}((z.l.l + z.r.r) / 2)
+    (z + star(z)) / 2
 end
 
 """
@@ -174,7 +167,7 @@ The anti-self-star-conjugate part. If ``z=a+bW+cX+dWX``, then `antiselfstar(z)` 
 ```math
     \\frac{1}{2}(a-d)(1-WX)
 ```
-The result is an `AntiSelfStar2`. This operation is idempotent.
+This operation is not idempotent.
 """
 function antiselfstar(z::Multivector2{T}) where {T <: Real}
     AntiSelfStar2{T}((z.l.l - z.r.r) / 2)
@@ -227,28 +220,28 @@ function (-)(a::Real, z::Multivector2)
 end
 
 """
-    (∧)(x::Multivector2, y::Multivector2)
+    (*)(x::Multivector2, y::Multivector2)
 
 Wedge product of two 2-dimensional multivectors.
 """
 
-function (∧)(x::Multivector2, y::Multivector2)
-    Multivector2(x.l ∧ y.l,  (y.r ∧ x.l) + (x.r ∧ conj(y.l)))
+function (*)(x::Multivector2, y::Multivector2)
+    Multivector2(x.l * y.l,  (y.r * x.l) + (x.r * conj(y.l)))
 end
 
-function (∧)(x::Multivector2, y::Multivector1)
-    Multivector2(x.l ∧ y, x.r ∧ conj(y))
+function (*)(x::Multivector2, y::Multivector1)
+    Multivector2(x.l * y, x.r * conj(y))
 end
 
-function (∧)(x::Multivector1, y::Multivector2)
-    Multivector2(x ∧ y.l,  y.r ∧ x)
+function (*)(x::Multivector1, y::Multivector2)
+    Multivector2(x * y.l,  y.r * x)
 end
 
 """
-    (*)(z::Multivector1, a::Real)
-    (*)(a::Real, z::Multivector1)
+    (*)(z::Multivector2, a::Real)
+    (*)(a::Real, z::Multivector2)
 
-Scaling and/or reflection of a `Multivector1` by a real number.
+Scaling and/or reflection of a `Multivector2` by a real number.
 """
 function (*)(z::Multivector2, a::Real)
     Multivector2(z.l * a, z.r * a)
@@ -258,16 +251,8 @@ function (*)(a::Real, z::Multivector2)
     Multivector2(z.l * a, z.r * a)
 end
 
-function (∧)(z::AbstractMultivector2, a::Real)
-    z * a
-end
-
-function (∧)(a::Real, z::AbstractMultivector2)
-    a * z
-end
-
 function commutator(x::AbstractMultivector, y::AbstractMultivector)
-    (x ∧ y) - (y ∧ x)
+    (x * y) - (y * x)
 end
 
 """
@@ -283,7 +268,7 @@ abs2(z::Multivector2) = abs2(z.l)
 """
     iszerodivisor(z::Multivector2)
 
-Returns true if `z` is of the form ``bW+cX+dWX`` such that ``z ∧ conj(z) = 0``.
+Returns true if `z` is of the form ``bW+cX+dWX`` such that ``z * conj(z) = 0``.
 """
 iszerodivisor(z::Multivector2{T}) where {T <: Real} = iszerodivisor(z.l)
 
@@ -349,91 +334,91 @@ function (\)(a::Real, z::Multivector2)
 end
 
 """
-    crossratioL(w::AbstractMultivector2,
-               x::AbstractMultivector2,
-               y::AbstractMultivector2,
-               z::AbstractMultivector2)
+    crossratioL(w::AbstractMultivector,
+               x::AbstractMultivector,
+               y::AbstractMultivector,
+               z::AbstractMultivector)
 
 The left cross-ratio:
 ```julia
-    ((x-y) \\ (w-y)) ∧ ((w-z) \\ (x-z))
+    ((x-y) \\ (w-y)) * ((w-z) \\ (x-z))
 ```
 The left cross-ratio is invariant under right Möbius transformations.
 """
-function crossratioL(w::AbstractMultivector2,
-                     x::AbstractMultivector2,
-                     y::AbstractMultivector2,
-                     z::AbstractMultivector2)
-    inv(x - y) ∧ (w - y) ∧ inv(w - z) ∧ (x - z)
+function crossratioL(w::AbstractMultivector,
+                     x::AbstractMultivector,
+                     y::AbstractMultivector,
+                     z::AbstractMultivector)
+    (inv(x - y) * (w - y)) * (inv(w - z) * (x - z))
 end
 
 """
-    crossratioR(w::AbstractMultivector2,
-                x::AbstractMultivector2,
-                y::AbstractMultivector2,
-                z::AbstractMultivector2)
+    crossratioR(w::AbstractMultivector,
+                x::AbstractMultivector,
+                y::AbstractMultivector,
+                z::AbstractMultivector)
 
 The right cross-ratio:
 ```julia
-    ((w-y) / (x-y)) ∧ ((x-z) / (w-z))
+    ((w-y) / (x-y)) * ((x-z) / (w-z))
 ```
 The right cross-ratio is invariant under left Möbius transformations.
 """
-function crossratioR(w::AbstractMultivector2,
-                     x::AbstractMultivector2,
-                     y::AbstractMultivector2,
-                     z::AbstractMultivector2)
-    (w - y) ∧ inv(x - y) ∧ (x - z) ∧ inv(w - z)
+function crossratioR(w::AbstractMultivector,
+                     x::AbstractMultivector,
+                     y::AbstractMultivector,
+                     z::AbstractMultivector)
+    ((w - y) * inv(x - y)) * ((x - z) * inv(w - z))
 end
 
 """
-    möbiusL(z::AbstractMultivector2,
-           a::AbstractMultivector2,
-           b::AbstractMultivector2,
-           c::AbstractMultivector2,
-           d::AbstractMultivector2)
-    möbiusL(z::AbstractMultivector2, a::Real, b::Real, c::Real, d::Real)
+    möbiusL(z::AbstractMultivector,
+           a::AbstractMultivector,
+           b::AbstractMultivector,
+           c::AbstractMultivector,
+           d::AbstractMultivector)
+    möbiusL(z::AbstractMultivector, a::Real, b::Real, c::Real, d::Real)
 
 The left Möbius transformation:
 ```julia
-    ((z ∧ c) + d) \\ ((z ∧ a) + b)
+    ((z * c) + d) \\ ((z * a) + b)
 ```
 This transformation is also know as a fractional linear transformation.
 """
-function möbiusL(z::AbstractMultivector2,
-                a::AbstractMultivector2,
-                b::AbstractMultivector2,
-                c::AbstractMultivector2,
-                d::AbstractMultivector2)
-    inv((z ∧ c) + d) ∧ ((z ∧ a) + b)
+function möbiusL(z::AbstractMultivector,
+                a::AbstractMultivector,
+                b::AbstractMultivector,
+                c::AbstractMultivector,
+                d::AbstractMultivector)
+    inv((z * c) + d) * ((z * a) + b)
 end
 
-function möbiusL(z::AbstractMultivector2, a::Real, b::Real, c::Real, d::Real)
-    inv((c * z) + d) ∧ ((a * z) + b)
+function möbiusL(z::AbstractMultivector, a::Real, b::Real, c::Real, d::Real)
+    inv((c * z) + d) * ((a * z) + b)
 end
 
 """
-    möbiusR(z::AbstractMultivector2,
-           a::AbstractMultivector2,
-           b::AbstractMultivector2,
-           c::AbstractMultivector2,
-           d::AbstractMultivector2)
-    möbiusR(z::AbstractMultivector2, a::Real, b::Real, c::Real, d::Real)
+    möbiusR(z::AbstractMultivector,
+           a::AbstractMultivector,
+           b::AbstractMultivector,
+           c::AbstractMultivector,
+           d::AbstractMultivector)
+    möbiusR(z::AbstractMultivector, a::Real, b::Real, c::Real, d::Real)
 
 The right Möbius transformation:
 ```julia
-    ((a ∧ z) + b) / ((c ∧ z) + d)
+    ((a * z) + b) / ((c * z) + d)
 ```
 This transformation is also know as a fractional linear transformation.
 """
-function möbiusR(z::AbstractMultivector2,
-                a::AbstractMultivector2,
-                b::AbstractMultivector2,
-                c::AbstractMultivector2,
-                d::AbstractMultivector2)
-    ((a ∧ z) + b) ∧ inv((c ∧ z) + d)
+function möbiusR(z::AbstractMultivector,
+                a::AbstractMultivector,
+                b::AbstractMultivector,
+                c::AbstractMultivector,
+                d::AbstractMultivector)
+    ((a * z) + b) * inv((c * z) + d)
 end
 
-function möbiusR(z::AbstractMultivector2, a::Real, b::Real, c::Real, d::Real)
-    ((a * z) + b) ∧ inv((c * z) + d)
+function möbiusR(z::AbstractMultivector, a::Real, b::Real, c::Real, d::Real)
+    ((a * z) + b) * inv((c * z) + d)
 end
