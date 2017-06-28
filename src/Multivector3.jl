@@ -312,59 +312,12 @@ function (*)(a::Real, z::Multivector3)
     Multivector3(z.l * a, z.r * a)
 end
 
-"""
-    associator(x::AbstractMultivector, y::AbstractMultivector, z::AbstractMultivector)
-
-Measures the failure of associativity of multivector multiplication.
-"""
-function associator(x::AbstractMultivector, y::AbstractMultivector, z::AbstractMultivector)
-    ((x * y) * z) - (x * (y * z))
-end
-
-"""
-    abs(z::Multivector3)
-"""
-abs(z::Multivector3) = abs(z.l)
-
-"""
-    abs2(z::Multivector3)
-"""
-abs2(z::Multivector3) = abs2(z.l)
-
-"""
-    iszerodivisor(z::Multivector3)
-
-Returns true if `z` is of the form ``bA+cB+dAB+fC+gAC+hBC+j(AB)C`` such that ``z * conj(z) = 0``.
-"""
-iszerodivisor(z::Multivector3{T}) where {T <: Real} = iszerodivisor(z.l)
-
-"""
-    inv(z::Multivector3)
-
-Inverse of a `Multivector3`. An error occurs if argument is a zero divisor.
-"""
-function inv(z::Multivector3)
-    if iszerodivisor(z)
-        error(ZeroDivisorInverse)
-    end
-
-    conj(z) / abs2(z)
-end
-
 function (/)(x::Multivector3, y::Multivector3)
     if iszerodivisor(y)
         error(ZeroDivisorDenominator)
     end
 
     x * inv(y)
-end
-
-function (/)(a::Real, z::Multivector3)
-    if iszerodivisor(z)
-        error(ZeroDivisorDenominator)
-    end
-
-    a * inv(z)
 end
 
 function (/)(z::Multivector3, a::Real)
@@ -381,14 +334,6 @@ function (\)(y::Multivector3, x::Multivector3)
     end
 
     inv(y) * x
-end
-
-function (\)(z::Multivector3, a::Real)
-    if iszerodivisor(z)
-        error(ZeroDivisorDenominator)
-    end
-
-    a * inv(z)
 end
 
 function (\)(a::Real, z::Multivector3)

@@ -16,22 +16,16 @@ const ZeroDenominator = "denominator is zero"
 "Error when the denominator in a quotient is a zero divisor."
 const ZeroDivisorDenominator = "denominator is zero divisor"
 
-"""
-    AbstractMultivector{T <: Real} <: Number
-
-An abstract low-dimensional multivector.
-"""
-abstract type AbstractMultivector{T <: Real} <: Number end
-
+include("AbstractMultivector.jl")
 include("Multivector1.jl")
 include("Multivector2.jl")
 include("Multivector3.jl")
 include("Multivector4.jl")
 
-export AbstractMultivector
-export Multivector1, unreal, asarray, cloak, dagger, star, selfstar, antiselfstar, iszerodivisor
-export Multivector2, commutator, crossratioL, crossratioR, möbiusL, möbiusR
-export Multivector3, associator
-export Multivector4, jacobiator
+export AbstractMultivector, asarray, selfstar, antiselfstar, iszerodivisor, commutator, associator, jacobiator, crossratioL, crossratioR, möbiusL, möbiusR
+export Multivector1, unreal, cloak, dagger, star
+export Multivector2
+export Multivector3
+export Multivector4
 
 end

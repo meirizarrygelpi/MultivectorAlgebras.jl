@@ -227,59 +227,12 @@ function (*)(a::Real, z::Multivector2)
     Multivector2(z.l * a, z.r * a)
 end
 
-"""
-    commutator(x::AbstractMultivector, y::AbstractMultivector)
-
-Measures the failure of commutativity of multivector multiplication.
-"""
-function commutator(x::AbstractMultivector, y::AbstractMultivector)
-    (x * y) - (y * x)
-end
-
-"""
-    abs(z::Multivector2)
-"""
-abs(z::Multivector2) = abs(z.l)
-
-"""
-    abs2(z::Multivector2)
-"""
-abs2(z::Multivector2) = abs2(z.l)
-
-"""
-    iszerodivisor(z::Multivector2)
-
-Returns true if `z` is of the form ``bA+cB+dAB`` such that ``z * conj(z) = 0``.
-"""
-iszerodivisor(z::Multivector2{T}) where {T <: Real} = iszerodivisor(z.l)
-
-"""
-    inv(z::Multivector2)
-
-Inverse of a `Multivector2`. An error occurs if argument is a zero divisor.
-"""
-function inv(z::Multivector2)
-    if iszerodivisor(z)
-        error(ZeroDivisorInverse)
-    end
-
-    conj(z) / abs2(z)
-end
-
 function (/)(x::Multivector2, y::Multivector2)
     if iszerodivisor(y)
         error(ZeroDivisorDenominator)
     end
 
     x * inv(y)
-end
-
-function (/)(a::Real, z::Multivector2)
-    if iszerodivisor(z)
-        error(ZeroDivisorDenominator)
-    end
-
-    a * inv(z)
 end
 
 function (/)(z::Multivector2, a::Real)
@@ -298,108 +251,10 @@ function (\)(y::Multivector2, x::Multivector2)
     inv(y) * x
 end
 
-function (\)(z::Multivector2, a::Real)
-    if iszerodivisor(z)
-        error(ZeroDivisorDenominator)
-    end
-
-    a * inv(z)
-end
-
 function (\)(a::Real, z::Multivector2)
     if iszero(a)
         error(ZeroDenominator)
     end
     
     Multivector2(z.l / a, z.r / a)
-end
-
-"""
-    crossratioL(w::AbstractMultivector,
-               x::AbstractMultivector,
-               y::AbstractMultivector,
-               z::AbstractMultivector)
-
-The left cross-ratio:
-```julia
-    ((x-y) \\ (w-y)) * ((w-z) \\ (x-z))
-```
-The left cross-ratio is invariant under right Möbius transformations.
-"""
-function crossratioL(w::AbstractMultivector,
-                     x::AbstractMultivector,
-                     y::AbstractMultivector,
-                     z::AbstractMultivector)
-    (inv(x - y) * (w - y)) * (inv(w - z) * (x - z))
-end
-
-"""
-    crossratioR(w::AbstractMultivector,
-                x::AbstractMultivector,
-                y::AbstractMultivector,
-                z::AbstractMultivector)
-
-The right cross-ratio:
-```julia
-    ((w-y) / (x-y)) * ((x-z) / (w-z))
-```
-The right cross-ratio is invariant under left Möbius transformations.
-"""
-function crossratioR(w::AbstractMultivector,
-                     x::AbstractMultivector,
-                     y::AbstractMultivector,
-                     z::AbstractMultivector)
-    ((w - y) * inv(x - y)) * ((x - z) * inv(w - z))
-end
-
-"""
-    möbiusL(z::AbstractMultivector,
-           a::AbstractMultivector,
-           b::AbstractMultivector,
-           c::AbstractMultivector,
-           d::AbstractMultivector)
-    möbiusL(z::AbstractMultivector, a::Real, b::Real, c::Real, d::Real)
-
-The left Möbius transformation:
-```julia
-    ((z * c) + d) \\ ((z * a) + b)
-```
-This transformation is also know as a fractional linear transformation.
-"""
-function möbiusL(z::AbstractMultivector,
-                a::AbstractMultivector,
-                b::AbstractMultivector,
-                c::AbstractMultivector,
-                d::AbstractMultivector)
-    inv((z * c) + d) * ((z * a) + b)
-end
-
-function möbiusL(z::AbstractMultivector, a::Real, b::Real, c::Real, d::Real)
-    inv((c * z) + d) * ((a * z) + b)
-end
-
-"""
-    möbiusR(z::AbstractMultivector,
-           a::AbstractMultivector,
-           b::AbstractMultivector,
-           c::AbstractMultivector,
-           d::AbstractMultivector)
-    möbiusR(z::AbstractMultivector, a::Real, b::Real, c::Real, d::Real)
-
-The right Möbius transformation:
-```julia
-    ((a * z) + b) / ((c * z) + d)
-```
-This transformation is also know as a fractional linear transformation.
-"""
-function möbiusR(z::AbstractMultivector,
-                a::AbstractMultivector,
-                b::AbstractMultivector,
-                c::AbstractMultivector,
-                d::AbstractMultivector)
-    ((a * z) + b) * inv((c * z) + d)
-end
-
-function möbiusR(z::AbstractMultivector, a::Real, b::Real, c::Real, d::Real)
-    ((a * z) + b) * inv((c * z) + d)
 end

@@ -258,54 +258,12 @@ function (*)(a::Real, z::Multivector4)
     Multivector4(z.l * a, z.r * a)
 end
 
-"""
-    jacobiator(x::AbstractMultivector, y::AbstractMultivector, z::AbstractMultivector)
-
-Measures the failure of multivector multiplication to satisfy the Jacobi identity.
-"""
-function jacobiator(x::AbstractMultivector, y::AbstractMultivector, z::AbstractMultivector)
-    (x * (y * z)) + (y * (z * x)) + (z * (x * y))
-end
-
-"""
-    abs(z::Multivector4)
-"""
-abs(z::Multivector4) = abs(z.l)
-
-"""
-    abs2(z::Multivector4)
-"""
-abs2(z::Multivector4) = abs2(z.l)
-
-iszerodivisor(z::Multivector4{T}) where {T <: Real} = iszerodivisor(z.l)
-
-"""
-    inv(z::Multivector4)
-
-Inverse of a `Multivector4`. An error occurs if argument is a zero divisor.
-"""
-function inv(z::Multivector4)
-    if iszerodivisor(z)
-        error(ZeroDivisorInverse)
-    end
-
-    conj(z) / abs2(z)
-end
-
 function (/)(x::Multivector4, y::Multivector4)
     if iszerodivisor(y)
         error(ZeroDivisorDenominator)
     end
 
     x * inv(y)
-end
-
-function (/)(a::Real, z::Multivector4)
-    if iszerodivisor(z)
-        error(ZeroDivisorDenominator)
-    end
-
-    a * inv(z)
 end
 
 function (/)(z::Multivector4, a::Real)
@@ -322,14 +280,6 @@ function (\)(y::Multivector4, x::Multivector4)
     end
 
     inv(y) * x
-end
-
-function (\)(z::Multivector4, a::Real)
-    if iszerodivisor(z)
-        error(ZeroDivisorDenominator)
-    end
-
-    a * inv(z)
 end
 
 function (\)(a::Real, z::Multivector4)

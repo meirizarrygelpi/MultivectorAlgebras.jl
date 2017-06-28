@@ -41,14 +41,6 @@ function unreal(z::Multivector1)
     z.r
 end
 
-function isreal(z::AbstractMultivector)
-    iszero(unreal(z))
-end
-
-function asarray(z::AbstractMultivector)
-    vcat(real(z), unreal(z))
-end
-
 function zero(z::Multivector1{T}) where {T <: Real}
     Multivector1{T}(zero(z.l), zero(z.r))
 end
@@ -117,28 +109,6 @@ function star(z::Multivector1{T}) where {T <: Real}
     Multivector1{T}(z.r, z.l)
 end
 
-"""
-    selfstar(z::AbstractMultivector)
-
-The self-star-conjugate part.
-In odd number of dimensions, this operation is idempotent.
-"""
-function selfstar(z::AbstractMultivector)
-    (z + star(z)) / 2
-end
-
-"""
-    antiselfstar(z::AbstractMultivector)
-
-The anti-self-star-conjugate part.
-In odd number of dimensions, this operation is idempotent.
-"""
-function antiselfstar(z::AbstractMultivector)
-    (z - star(z)) / 2
-end
-
-(+)(z::AbstractMultivector{T}) where {T <: Real} = z
-
 function (+)(x::Multivector1, y::Multivector1)
     Multivector1(x.l + y.l, x.r + y.r)
 end
@@ -191,51 +161,12 @@ function (*)(a::Real, z::Multivector1)
     Multivector1(z.l * a, z.r * a)
 end
 
-"""
-    abs(z::Multivector1)
-"""
-abs(z::Multivector1) = abs(z.l)
-
-"""
-    abs2(z::Multivector1)
-"""
-abs2(z::Multivector1) = (z.l)^2
-
-"""
-    iszerodivisor(z::Multivector1)
-
-Returns true if `z` is of the form ``bA`` such that ``z * conj(z) = 0``.
-Note that it follows that also ``z * z = 0``.
-"""
-iszerodivisor(z::Multivector1{T}) where {T <: Real} = iszero(z.l)
-
-"""
-    inv(z::Multivector1)
-
-Inverse of a `Multivector1`. An error occurs if argument is a zero divisor.
-"""
-function inv(z::Multivector1)
-    if iszerodivisor(z)
-        error(ZeroDivisorInverse)
-    end
-
-    conj(z) / abs2(z)
-end
-
 function (/)(x::Multivector1, y::Multivector1)
     if iszerodivisor(y)
         error(ZeroDivisorDenominator)
     end
 
     Multivector1(x.l * y.l, (x.r * y.l) - (y.r * x.l)) / abs2(y)
-end
-
-function (/)(a::Real, z::Multivector1)
-    if iszerodivisor(z)
-        error(ZeroDivisorDenominator)
-    end
-
-    a * inv(z)
 end
 
 function (/)(z::Multivector1, a::Real)
@@ -252,14 +183,6 @@ function (\)(y::Multivector1, x::Multivector1)
     end
 
     Multivector1(x.l * y.l, (x.r * y.l) - (y.r * x.l)) / abs2(y)
-end
-
-function (\)(z::Multivector1, a::Real)
-    if iszerodivisor(z)
-        error(ZeroDivisorDenominator)
-    end
-
-    a * inv(z)
 end
 
 function (\)(a::Real, z::Multivector1)
