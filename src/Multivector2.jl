@@ -198,7 +198,7 @@ end
 """
     (*)(x::Multivector2, y::Multivector2)
 
-Wedge product of two 2-dimensional multivectors.
+Wedge product of 2-dimensional multivectors.
 This operation is non-commutative but associative.
 """
 function (*)(x::Multivector2, y::Multivector2)
@@ -224,7 +224,7 @@ function (*)(z::Multivector2, a::Real)
 end
 
 function (*)(a::Real, z::Multivector2)
-    Multivector2(z.l * a, z.r * a)
+    Multivector2(a * z.l, a * z.r)
 end
 
 function (/)(x::Multivector2, y::Multivector2)
@@ -235,14 +235,6 @@ function (/)(x::Multivector2, y::Multivector2)
     x * inv(y)
 end
 
-function (/)(z::Multivector2, a::Real)
-    if iszero(a)
-        error(ZeroDenominator)
-    end
-
-    Multivector2(z.l / a, z.r / a)
-end
-
 function (\)(y::Multivector2, x::Multivector2)
     if iszerodivisor(y)
         error(ZeroDivisorDenominator)
@@ -251,10 +243,10 @@ function (\)(y::Multivector2, x::Multivector2)
     inv(y) * x
 end
 
-function (\)(a::Real, z::Multivector2)
-    if iszero(a)
-        error(ZeroDenominator)
-    end
-    
+function (/)(z::Multivector2, a::Real)
     Multivector2(z.l / a, z.r / a)
+end
+
+function (\)(a::Real, z::Multivector2)
+    Multivector2(a \ z.l, a \ z.r)
 end

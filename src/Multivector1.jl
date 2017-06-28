@@ -140,7 +140,7 @@ end
 """
     (*)(x::Multivector1, y::Multivector1)
 
-Wedge product of two 1-dimensional multivectors.
+Wedge product of 1-dimensional multivectors.
 This operation is commutative and associative.
 """
 function (*)(x::Multivector1, y::Multivector1)
@@ -158,7 +158,7 @@ function (*)(z::Multivector1, a::Real)
 end
 
 function (*)(a::Real, z::Multivector1)
-    Multivector1(z.l * a, z.r * a)
+    Multivector1(a * z.l, a * z.r)
 end
 
 function (/)(x::Multivector1, y::Multivector1)
@@ -166,6 +166,16 @@ function (/)(x::Multivector1, y::Multivector1)
         error(ZeroDivisorDenominator)
     end
 
+    # Naive division algorithm
+    Multivector1(x.l * y.l, (x.r * y.l) - (y.r * x.l)) / abs2(y)
+end
+
+function (\)(y::Multivector1, x::Multivector1)
+    if iszerodivisor(y)
+        error(ZeroDivisorDenominator)
+    end
+
+    # Naive division algorithm
     Multivector1(x.l * y.l, (x.r * y.l) - (y.r * x.l)) / abs2(y)
 end
 
@@ -177,18 +187,10 @@ function (/)(z::Multivector1, a::Real)
     Multivector1(z.l / a, z.r / a)
 end
 
-function (\)(y::Multivector1, x::Multivector1)
-    if iszerodivisor(y)
-        error(ZeroDivisorDenominator)
-    end
-
-    Multivector1(x.l * y.l, (x.r * y.l) - (y.r * x.l)) / abs2(y)
-end
-
 function (\)(a::Real, z::Multivector1)
     if iszero(a)
         error(ZeroDenominator)
     end
     
-    Multivector1(z.l / a, z.r / a)
+    Multivector1(a \ z.l, a \ z.r)
 end

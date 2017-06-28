@@ -309,7 +309,7 @@ function (*)(z::Multivector3, a::Real)
 end
 
 function (*)(a::Real, z::Multivector3)
-    Multivector3(z.l * a, z.r * a)
+    Multivector3(a * z.l, a * z.r)
 end
 
 function (/)(x::Multivector3, y::Multivector3)
@@ -320,14 +320,6 @@ function (/)(x::Multivector3, y::Multivector3)
     x * inv(y)
 end
 
-function (/)(z::Multivector3, a::Real)
-    if iszero(a)
-        error(ZeroDenominator)
-    end
-
-    Multivector3(z.l / a, z.r / a)
-end
-
 function (\)(y::Multivector3, x::Multivector3)
     if iszerodivisor(y)
         error(ZeroDivisorDenominator)
@@ -336,10 +328,10 @@ function (\)(y::Multivector3, x::Multivector3)
     inv(y) * x
 end
 
-function (\)(a::Real, z::Multivector3)
-    if iszero(a)
-        error(ZeroDenominator)
-    end
-    
+function (/)(z::Multivector3, a::Real)
     Multivector3(z.l / a, z.r / a)
+end
+
+function (\)(a::Real, z::Multivector3)
+    Multivector3(a \ z.l, a \ z.r)
 end

@@ -213,7 +213,7 @@ end
 """
     (*)(x::Multivector4, y::Multivector4)
 
-Wedge product of two 3-dimensional multivectors.
+Wedge product of 4-dimensional multivectors.
 This operation is non-commutative and non-associative.
 """
 function (*)(x::Multivector4, y::Multivector4)
@@ -255,7 +255,7 @@ function (*)(z::Multivector4, a::Real)
 end
 
 function (*)(a::Real, z::Multivector4)
-    Multivector4(z.l * a, z.r * a)
+    Multivector4(a * z.l, a * z.r)
 end
 
 function (/)(x::Multivector4, y::Multivector4)
@@ -266,14 +266,6 @@ function (/)(x::Multivector4, y::Multivector4)
     x * inv(y)
 end
 
-function (/)(z::Multivector4, a::Real)
-    if iszero(a)
-        error(ZeroDenominator)
-    end
-
-    Multivector4(z.l / a, z.r / a)
-end
-
 function (\)(y::Multivector4, x::Multivector4)
     if iszerodivisor(y)
         error(ZeroDivisorDenominator)
@@ -282,10 +274,10 @@ function (\)(y::Multivector4, x::Multivector4)
     inv(y) * x
 end
 
-function (\)(a::Real, z::Multivector4)
-    if iszero(a)
-        error(ZeroDenominator)
-    end
-    
+function (/)(z::Multivector4, a::Real)
     Multivector4(z.l / a, z.r / a)
+end
+
+function (\)(a::Real, z::Multivector4)
+    Multivector4(a \ z.l, a \ z.r)
 end
