@@ -199,7 +199,7 @@ abs(z::Multivector1) = abs(z.l)
 """
     abs2(z::Multivector1)
 """
-abs2(z::Multivector1) = z.l^2
+abs2(z::Multivector1) = (z.l)^2
 
 """
     iszerodivisor(z::Multivector1)

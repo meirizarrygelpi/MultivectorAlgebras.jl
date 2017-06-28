@@ -26,11 +26,12 @@ abstract type AbstractMultivector{T <: Real} <: Number end
 include("Multivector1.jl")
 include("Multivector2.jl")
 include("Multivector3.jl")
-# include("Multivector4.jl")
+include("Multivector4.jl")
 
 export AbstractMultivector
 export Multivector1, unreal, asarray, cloak, dagger, star, selfstar, antiselfstar, iszerodivisor
 export Multivector2, commutator, crossratioL, crossratioR, möbiusL, möbiusR
 export Multivector3, associator
+export Multivector4, jacobiator
 
 end

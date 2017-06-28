@@ -145,7 +145,7 @@ Returns the Hodge star conjugate. If ``z=a+bA+cB+dAB``, then `star(z)` gives
 ```math
     d-cA+bB+aAB
 ```
-This operation is an involution.
+This operation is not an involution, but `star(star(z)) = dagger(z)`.
 """
 function star(z::Multivector2{T}) where {T <: Real}
     Multivector2{T}(dagger(star(z.r)), star(z.l))
@@ -227,6 +227,11 @@ function (*)(a::Real, z::Multivector2)
     Multivector2(z.l * a, z.r * a)
 end
 
+"""
+    commutator(x::AbstractMultivector, y::AbstractMultivector)
+
+Measures the failure of commutativity of multivector multiplication.
+"""
 function commutator(x::AbstractMultivector, y::AbstractMultivector)
     (x * y) - (y * x)
 end

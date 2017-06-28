@@ -14,7 +14,8 @@ where ``p`` and ``q`` are 2-dimensional multivectors, or
 ```
 where ``a``, ``b``, ``c``, ``d``, ``f``, ``g``, ``h``, and ``j`` are real
 (and of the same type), and ``A * A = 0``, ``B * B = 0``, `` C * C = 0``;
-``AB = A * B = -B * A``, ``AC = A * C = -C * A``, and ``BC = B * C = -C * B``.
+``AB = A * B = -B * A``, ``AC = A * C = -C * A``, ``BC = B * C = -C * B``;
+and ``(AB)C = (A * B) * C``.
 Here ``*`` is the wedge product.
 """
 struct Multivector3{T <: Real} <: AbstractMultivector{T}
@@ -311,6 +312,11 @@ function (*)(a::Real, z::Multivector3)
     Multivector3(z.l * a, z.r * a)
 end
 
+"""
+    associator(x::AbstractMultivector, y::AbstractMultivector, z::AbstractMultivector)
+
+Measures the failure of associativity of multivector multiplication.
+"""
 function associator(x::AbstractMultivector, y::AbstractMultivector, z::AbstractMultivector)
     ((x * y) * z) - (x * (y * z))
 end
