@@ -1,16 +1,20 @@
 """
     Multivector3{T <: Real} <: AbstractMultivector{T}
 
-An immutable octet of real numbers that represents a member
+An immutable 8-tuple of real numbers that represents a member
 of a 3-dimensional multivector algebra.
 
 Each `Multivector3` has the form
 ```math
-    a+bW+cX+dWX+fY+gWY+hXY+j(WX)Y
+    p+qC
+```
+where ``p`` and ``q`` are 2-dimensional multivectors, or
+```math
+    a+bA+cB+dAB+fC+gAC+hBC+j(AB)C
 ```
 where ``a``, ``b``, ``c``, ``d``, ``f``, ``g``, ``h``, and ``j`` are real
-(and of the same type), and ``W * W = 0``, ``X * X = 0``, `` Y * Y = 0``;
-``WX = W * X = -X * W``, ``WY = W * Y = -Y * W``, and ``XY = X * Y = -Y * X``.
+(and of the same type), and ``A * A = 0``, ``B * B = 0``, `` C * C = 0``;
+``AB = A * B = -B * A``, ``AC = A * C = -C * A``, and ``BC = B * C = -C * B``.
 Here ``*`` is the wedge product.
 """
 struct Multivector3{T <: Real} <: AbstractMultivector{T}
@@ -112,19 +116,19 @@ end
 function show(io::IO, z::Multivector3)
     print(io, "[1: ")
     print(io, z.l.l.l)
-    print(io, ", W: ")
+    print(io, ", A: ")
     print(io, z.l.l.r)
-    print(io, ", X: ")
+    print(io, ", B: ")
     print(io, z.l.r.l)
-    print(io, ", WX: ")
+    print(io, ", AB: ")
     print(io, z.l.r.r)
-    print(io, ", Y: ")
+    print(io, ", C: ")
     print(io, z.r.l.l)
-    print(io, ", WY: ")
+    print(io, ", AC: ")
     print(io, z.r.l.r)
-    print(io, ", XY: ")
+    print(io, ", BC: ")
     print(io, z.r.r.l)
-    print(io, ", (WX)Y: ")
+    print(io, ", (AB)C: ")
     print(io, z.r.r.r)
     print(io, "]")
 end
@@ -156,10 +160,10 @@ end
 """
     conj{T <: Real}(z::Multivector3{T})
 
-The `Multivector3` conjugate. If ``z=a+bW+cX+dWX+fY+gWY+hXY+j(WX)Y``,
+The `Multivector3` conjugate. If ``z=a+bA+cB+dAB+fC+gAC+hBC+j(AB)C``,
 then `conj(z)` gives
 ```math
-    a-bW-cX-dWX-fY-gWY-hXY-j(WX)Y
+    a-bA-cB-dAB-fC-gAC-hBC-j(AB)C
 ```
 This operation is an involution.
 """
@@ -170,10 +174,10 @@ end
 """
     cloak{T <: Real}(z::Multivector3{T})
 
-The cloak conjugate changes the sign of even blades. If ``z=a+bW+cX+dWX+fY+gWY+hXY+j(WX)Y``,
+The cloak conjugate changes the sign of even blades. If ``z=a+bA+cB+dAB+fC+gAC+hBC+j(AB)C``,
 then `cloak(z)` gives
 ```math
-    -a+bW+cX-dWX+fY-gWY-hXY+j(WX)Y
+    -a+bA+cB-dAB+fC-gAC-hBC+j(AB)C
 ```
 This operation is equivalent to `-dagger(z)` and thus is also an involution.
 """
@@ -184,9 +188,9 @@ end
 """
     dagger{T <: Real}(z::Multivector3{T})
 
-The dagger conjugate changes the sign of odd blades. If ``z=a+bW+cX+dWX+fY+gWY+hXY+j(WX)Y``, then `dagger(z)` gives
+The dagger conjugate changes the sign of odd blades. If ``z=a+bA+cB+dAB+fC+gAC+hBC+j(AB)C``, then `dagger(z)` gives
 ```math
-    a-bW-cX+dWX-fY+gWY+hXY-j(WX)Y
+    a-bA-cB+dAB-fC+gAC+hBC-j(AB)C
 ```
 This operation is an involution.
 """
@@ -197,9 +201,9 @@ end
 """
     star{T <: Real}(z::Multivector3{T})
 
-Returns the Hodge star conjugate. If ``z=a+bW+cX+dWX+fY+gWY+hXY+j(WX)Y``, then `star(z)` gives
+Returns the Hodge star conjugate. If ``z=a+bA+cB+dAB+fC+gAC+hBC+j(AB)C``, then `star(z)` gives
 ```math
-    j+hW-gX+fWX+dY-cWY+bXY+a(WX)Y
+    j+hA-gB+fAB+dC-cAC+bBC+a(AB)C
 ```
 This operation is an involution.
 """
@@ -271,8 +275,8 @@ end
     (*)(x::Multivector3, y::Multivector3)
 
 Wedge product of two 3-dimensional multivectors.
+This operation is non-commutative and non-associative.
 """
-
 function (*)(x::Multivector3, y::Multivector3)
     Multivector3(x.l * y.l,  (y.r * x.l) + (x.r * conj(y.l)))
 end
@@ -324,7 +328,7 @@ abs2(z::Multivector3) = abs2(z.l)
 """
     iszerodivisor(z::Multivector3)
 
-Returns true if `z` is of the form ``bW+cX+dWX`` such that ``z * conj(z) = 0``.
+Returns true if `z` is of the form ``bA+cB+dAB+fC+gAC+hBC+j(AB)C`` such that ``z * conj(z) = 0``.
 """
 iszerodivisor(z::Multivector3{T}) where {T <: Real} = iszerodivisor(z.l)
 

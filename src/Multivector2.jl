@@ -1,15 +1,19 @@
 """
     Multivector2{T <: Real} <: AbstractMultivector{T}
 
-An immutable pair of pairs of real numbers that represents a member
+An immutable 4-tuple of real numbers that represents a member
 of a 2-dimensional multivector algebra.
 
 Each `Multivector2` has the form
 ```math
-    a+bW+cX+dWX
+    p+qB
+```
+where ``p`` and ``q`` are 1-dimensional multivectors, or
+```math
+    a+bA+cB+dAB
 ```
 where ``a``, ``b``, ``c``, and ``d`` are real (and of the same type),
-and ``W * W = 0``, ``X * X = 0``, and ``WX = W * X = -X * W``.
+and ``A * A = 0``, ``B * B = 0``, and ``AB = A * B = -B * A``.
 Here ``*`` is the wedge product.
 """
 struct Multivector2{T <: Real} <: AbstractMultivector{T}
@@ -62,11 +66,11 @@ end
 function show(io::IO, z::Multivector2)
     print(io, "[1: ")
     print(io, z.l.l)
-    print(io, ", W: ")
+    print(io, ", A: ")
     print(io, z.l.r)
-    print(io, ", X: ")
+    print(io, ", B: ")
     print(io, z.r.l)
-    print(io, ", WX: ")
+    print(io, ", AB: ")
     print(io, z.r.r)
     print(io, "]")
 end
@@ -98,9 +102,9 @@ end
 """
     conj{T <: Real}(z::Multivector2{T})
 
-The `Multivector2` conjugate. If ``z=a+bW+cX+dWX``, then `conj(z)` gives
+The `Multivector2` conjugate. If ``z=a+bA+cB+dAB``, then `conj(z)` gives
 ```math
-    a-bW-cX-dWX
+    a-bA-cB-dAB
 ```
 This operation is an involution.
 """
@@ -111,9 +115,9 @@ end
 """
     cloak{T <: Real}(z::Multivector2{T})
 
-The cloak conjugate changes the sign of even blades. If ``z=a+bW+cX+dWX``, then `cloak(z)` gives
+The cloak conjugate changes the sign of even blades. If ``z=a+bA+cB+dAB``, then `cloak(z)` gives
 ```math
-    -a+bW+cX-dWX
+    -a+bA+cB-dAB
 ```
 This operation is equivalent to `-dagger(z)` and thus is also an involution.
 """
@@ -124,9 +128,9 @@ end
 """
     dagger{T <: Real}(z::Multivector2{T})
 
-The dagger conjugate changes the sign of odd blades. If ``z=a+bW+cX+dWX``, then `dagger(z)` gives
+The dagger conjugate changes the sign of odd blades. If ``z=a+bA+cB+dAB``, then `dagger(z)` gives
 ```math
-    a-bW-cX+dWX
+    a-bA-cB+dAB
 ```
 This operation is an involution.
 """
@@ -137,9 +141,9 @@ end
 """
     star{T <: Real}(z::Multivector2{T})
 
-Returns the Hodge star conjugate. If ``z=a+bW+cX+dWX``, then `star(z)` gives
+Returns the Hodge star conjugate. If ``z=a+bA+cB+dAB``, then `star(z)` gives
 ```math
-    d-cW+bX+aWX
+    d-cA+bB+aAB
 ```
 This operation is an involution.
 """
@@ -195,8 +199,8 @@ end
     (*)(x::Multivector2, y::Multivector2)
 
 Wedge product of two 2-dimensional multivectors.
+This operation is non-commutative but associative.
 """
-
 function (*)(x::Multivector2, y::Multivector2)
     Multivector2(x.l * y.l,  (y.r * x.l) + (x.r * conj(y.l)))
 end
@@ -240,7 +244,7 @@ abs2(z::Multivector2) = abs2(z.l)
 """
     iszerodivisor(z::Multivector2)
 
-Returns true if `z` is of the form ``bW+cX+dWX`` such that ``z * conj(z) = 0``.
+Returns true if `z` is of the form ``bA+cB+dAB`` such that ``z * conj(z) = 0``.
 """
 iszerodivisor(z::Multivector2{T}) where {T <: Real} = iszerodivisor(z.l)
 

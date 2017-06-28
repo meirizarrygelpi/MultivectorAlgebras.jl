@@ -1,16 +1,16 @@
 """
     Multivector1{T <: Real} <: AbstractMultivector{T}
 
-An immutable pair of real numbers that represents a member of a 1-dimensional multivector algebra.
+An immutable 2-tuple of real numbers that represents a member of a 1-dimensional multivector algebra.
 
 Each `Multivector1` has the form
 ```math
-    a+bW
+    a+bA
 ```
-where ``a`` and ``b`` are real (and of the same type), and ``W * W = 0``.
+where ``a`` and ``b`` are real (and of the same type), and ``A * A = 0``.
 Here ``*`` is the wedge product. Note that
 ```math
-    (a + bW) * (a + bW) = a^{2} + 2abW
+    (a + bA) * (a + bA) = a^{2} + 2abA
 ```
 which, in general, is not equal to zero.
 """
@@ -28,7 +28,7 @@ Multivector1(a::T) where {T <: Real} = Multivector1{T}(a, zero(T))
 function show(io::IO, z::Multivector1)
     print(io, "[1: ")
     print(io, z.l)
-    print(io, ", W: ")
+    print(io, ", A: ")
     print(io, z.r)
     print(io, "]")
 end
@@ -68,9 +68,9 @@ end
 """
     conj{T <: Real}(z::Multivector1{T})
 
-The `Multivector1` conjugate. If ``z=a+bW``, then `conj(z)` gives
+The `Multivector1` conjugate. If ``z=a+bA``, then `conj(z)` gives
 ```math
-    a-bW
+    a-bA
 ```
 This operation is an involution.
 """
@@ -81,9 +81,9 @@ end
 """
     cloak{T <: Real}(z::Multivector1{T})
 
-The cloak conjugate changes the sign of even blades. If ``z=a+bW``, then `cloak(z)` gives
+The cloak conjugate changes the sign of even blades. If ``z=a+bA``, then `cloak(z)` gives
 ```math
-    -a+bW
+    -a+bA
 ```
 This operation is equivalent to `-conj(z)` and thus is also an involution.
 """
@@ -94,9 +94,9 @@ end
 """
     dagger{T <: Real}(z::Multivector1{T})
 
-The dagger conjugate changes the sign of odd blades. If ``z=a+bW``, then `dagger(z)` gives
+The dagger conjugate changes the sign of odd blades. If ``z=a+bA``, then `dagger(z)` gives
 ```math
-    a-bW
+    a-bA
 ```
 This operation is equivalent to `conj(z)` and thus is also an involution.
 """
@@ -107,9 +107,9 @@ end
 """
     star{T <: Real}(z::Multivector1{T})
 
-Returns the Hodge star conjugate. If ``z=a+bW``, then `star(z)` gives
+Returns the Hodge star conjugate. If ``z=a+bA``, then `star(z)` gives
 ```math
-    b+aW
+    b+aA
 ```
 This operation is an involution.
 """
@@ -171,8 +171,8 @@ end
     (*)(x::Multivector1, y::Multivector1)
 
 Wedge product of two 1-dimensional multivectors.
+This operation is commutative and associative.
 """
-
 function (*)(x::Multivector1, y::Multivector1)
     Multivector1(x.l * y.l, (x.r * y.l) + (y.r * x.l))
 end
@@ -204,7 +204,7 @@ abs2(z::Multivector1) = z.l^2
 """
     iszerodivisor(z::Multivector1)
 
-Returns true if `z` is of the form ``bW`` such that ``z * conj(z) = 0``.
+Returns true if `z` is of the form ``bA`` such that ``z * conj(z) = 0``.
 Note that it follows that also ``z * z = 0``.
 """
 iszerodivisor(z::Multivector1{T}) where {T <: Real} = iszero(z.l)
