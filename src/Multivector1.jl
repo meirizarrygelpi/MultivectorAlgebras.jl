@@ -109,6 +109,26 @@ function star(z::Multivector1{T}) where {T <: Real}
     Multivector1{T}(z.r, z.l)
 end
 
+"""
+    selfstar(z::Multivector1)
+
+The self-star-conjugate part.
+This operation is idempotent.
+"""
+function selfstar(z::Multivector1)
+    (z + star(z)) / 2
+end
+
+"""
+    antiselfstar(z::Multivector1)
+
+The anti-self-star-conjugate part.
+This operation is idempotent.
+"""
+function antiselfstar(z::Multivector1)
+    (z - star(z)) / 2
+end
+
 function (+)(x::Multivector1, y::Multivector1)
     Multivector1(x.l + y.l, x.r + y.r)
 end

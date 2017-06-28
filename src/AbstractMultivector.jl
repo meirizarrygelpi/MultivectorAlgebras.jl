@@ -17,26 +17,6 @@ function iszero(z::AbstractMultivector)
     iszero(asarray(z))
 end
 
-"""
-    selfstar(z::AbstractMultivector)
-
-The self-star-conjugate part.
-In odd number of dimensions, this operation is idempotent.
-"""
-function selfstar(z::AbstractMultivector)
-    (z + star(z)) / 2
-end
-
-"""
-    antiselfstar(z::AbstractMultivector)
-
-The anti-self-star-conjugate part.
-In odd number of dimensions, this operation is idempotent.
-"""
-function antiselfstar(z::AbstractMultivector)
-    (z - star(z)) / 2
-end
-
 (+)(z::AbstractMultivector{T}) where {T <: Real} = z
 
 """

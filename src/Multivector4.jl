@@ -134,6 +134,26 @@ function star(z::Multivector4{T}) where {T <: Real}
     Multivector4{T}(dagger(star(z.r)), star(z.l))
 end
 
+"""
+    selfstar(z::Multivector4)
+
+The self-star-conjugate part.
+This operation is idempotent.
+"""
+function selfstar(z::Multivector4)
+    (z + star(z) + dagger(z) + star(dagger(z))) / 4
+end
+
+"""
+    antiselfstar(z::Multivector4)
+
+The anti-self-star-conjugate part.
+This operation is idempotent.
+"""
+function antiselfstar(z::Multivector4)
+    (z - star(z) + dagger(z) - star(dagger(z))) / 4
+end
+
 function (+)(x::Multivector4, y::Multivector4)
     Multivector4(x.l + y.l, x.r + y.r)
 end

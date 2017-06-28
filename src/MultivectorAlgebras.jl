@@ -22,8 +22,8 @@ include("Multivector2.jl")
 include("Multivector3.jl")
 include("Multivector4.jl")
 
-export AbstractMultivector, asarray, selfstar, antiselfstar, iszerodivisor, commutator, associator, jacobiator, crossratioL, crossratioR, möbiusL, möbiusR
-export Multivector1, unreal, cloak, dagger, star
+export AbstractMultivector, asarray, iszerodivisor, commutator, associator, jacobiator, crossratioL, crossratioR, möbiusL, möbiusR
+export Multivector1, unreal, cloak, dagger, star, selfstar, antiselfstar
 export Multivector2
 export Multivector3
 export Multivector4

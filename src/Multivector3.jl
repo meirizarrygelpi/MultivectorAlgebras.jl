@@ -212,6 +212,26 @@ function star(z::Multivector3{T}) where {T <: Real}
     Multivector3{T}(dagger(star(z.r)), star(z.l))
 end
 
+"""
+    selfstar(z::Multivector3)
+
+The self-star-conjugate part.
+In odd number of dimensions, this operation is idempotent.
+"""
+function selfstar(z::Multivector3)
+    (z + star(z)) / 2
+end
+
+"""
+    antiselfstar(z::Multivector3)
+
+The anti-self-star-conjugate part.
+In odd number of dimensions, this operation is idempotent.
+"""
+function antiselfstar(z::Multivector3)
+    (z - star(z)) / 2
+end
+
 function (+)(x::Multivector3, y::Multivector3)
     Multivector3(x.l + y.l, x.r + y.r)
 end
