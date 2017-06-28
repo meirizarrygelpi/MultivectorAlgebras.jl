@@ -13,6 +13,10 @@ function asarray(z::AbstractMultivector)
     vcat(real(z), unreal(z))
 end
 
+function iszero(z::AbstractMultivector)
+    iszero(asarray(z))
+end
+
 """
     selfstar(z::AbstractMultivector)
 

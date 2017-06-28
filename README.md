@@ -13,9 +13,6 @@ Three concrete types are implemented:
 1. `Multivector1`: a 1-dimensional multivector, with 2 real components
 1. `Multivector2`: a 2-dimensional multivector, with 4 real components
 1. `Multivector3`: a 3-dimensional multivector, with 8 real components
-
-Future concrete types are:
-
 1. `Multivector4`: a 4-dimensional multivector, with 16 real components
 
 Work-in-progress!

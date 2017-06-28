@@ -2,7 +2,7 @@ __precompile__()
 
 module MultivectorAlgebras
 
-import Base: +, -, *, /, \, real, isreal, conj, inv, abs, abs2, show, zero, one
+import Base: +, -, *, /, \, real, isreal, conj, inv, abs, abs2, show, zero, one, iszero
 
 "Error when finding the inverse of zero."
 const ZeroInverse = "inverse of zero"
