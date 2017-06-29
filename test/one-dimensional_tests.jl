@@ -366,6 +366,13 @@ end
     l == r
 end
 
+# /: division of real
+@test begin
+    l = 2 / Multivector1(3//4, 5//6)
+    r = 2 * inv(Multivector1(3//4, 5//6))
+    l == r
+end
+
 # /: zero denominator
 @test_throws ErrorException begin
     Multivector1(1, 2) / 0
@@ -375,6 +382,13 @@ end
 @test begin
     l = 5 \ Multivector1(1.2, 3.4)
     r = Multivector1(5 \ 1.2, 5 \ 3.4)
+    l == r
+end
+
+# \: division of real
+@test begin
+    l = Multivector1(3//4, 5//6) \ 2
+    r = inv(Multivector1(3//4, 5//6)) * 2
     l == r
 end
 
@@ -498,5 +512,14 @@ end
     z = Multivector1(1.2, 3.4)
     l = antiselfstar(antiselfstar(z))
     r = antiselfstar(z)
+    l == r
+end
+
+# show
+@test begin
+    io = IOBuffer()
+    show(io, Multivector1(1, 2))
+    l = String(take!(io))
+    r = "[1: 1, A: 2]"
     l == r
 end
