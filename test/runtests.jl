@@ -1,5 +1,4 @@
 using MultivectorAlgebras
-using Base.Test
+using Base.Test: @testset
 
-# write your own tests here
-@test 1 == 2
+@testset "1-dimensional" begin include("one-dimensional_tests.jl") end
