@@ -1,7 +1,7 @@
 using MultivectorAlgebras
 using Base.Test: @test, @test_throws
 
-# Multivector1:same typed arguments
+# Multivector1: same typed arguments
 @test begin
     l = Multivector1(1.2, 3.4)
     r = Multivector1{Float64}(1.2, 3.4)
@@ -368,8 +368,8 @@ end
 
 # /: division of real
 @test begin
-    l = 2 / Multivector1(3//4, 5//6)
-    r = 2 * inv(Multivector1(3//4, 5//6))
+    l = 2 / Multivector1(3 // 4, 5 // 6)
+    r = 2 * inv(Multivector1(3 // 4, 5 // 6))
     l == r
 end
 
@@ -387,8 +387,8 @@ end
 
 # \: division of real
 @test begin
-    l = Multivector1(3//4, 5//6) \ 2
-    r = inv(Multivector1(3//4, 5//6)) * 2
+    l = Multivector1(3 // 4, 5 // 6) \ 2
+    r = inv(Multivector1(3 // 4, 5 // 6)) * 2
     l == r
 end
 

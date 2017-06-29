@@ -32,19 +32,19 @@ function Multivector2(z::Multivector1)
 end
 
 function Multivector2(a::T, b::T, c::T, d::T) where {T <: Real}
-    Multivector2{T}(Multivector1(a, b), Multivector1(c, d))
+    Multivector2{T}(Multivector1{T}(a, b), Multivector1{T}(c, d))
 end
 
 function Multivector2(a::T, b::T, c::T) where {T <: Real}
-    Multivector2{T}(Multivector1(a, b), Multivector1(c, zero(T)))
+    Multivector2{T}(Multivector1{T}(a, b), Multivector1{T}(c, zero(T)))
 end
 
 function Multivector2(a::T, b::T) where {T <: Real}
-    Multivector2{T}(Multivector1(a, b), zero(Multivector1{T}))
+    Multivector2{T}(Multivector1{T}(a, b), zero(Multivector1{T}))
 end
 
 function Multivector2(a::T) where {T <: Real}
-    Multivector2{T}(Multivector1(a, zero(T)), zero(Multivector1{T}))
+    Multivector2{T}(Multivector1{T}(a, zero(T)), zero(Multivector1{T}))
 end
 
 function Multivector2(a::Real, b::Real, c::Real, d::Real)
@@ -88,7 +88,7 @@ function zero(z::Multivector2{T}) where {T <: Real}
 end
 
 function zero(::Type{Multivector2{T}}) where {T <: Real}
-    Multivector2{T}(zero(T), zero(T), zero(T), zero(T))
+    Multivector2(zero(T), zero(T), zero(T), zero(T))
 end
 
 function one(z::Multivector2{T}) where {T <: Real}
@@ -96,7 +96,7 @@ function one(z::Multivector2{T}) where {T <: Real}
 end
 
 function one(::Type{Multivector2{T}}) where {T <: Real}
-    Multivector2{T}(one(T), zero(T), zero(T), zero(T))
+    Multivector2(one(T), zero(T), zero(T), zero(T))
 end
 
 """
