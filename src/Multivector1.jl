@@ -38,7 +38,7 @@ function real(z::Multivector1)
 end
 
 function unreal(a::Real)
-    0
+    zero(a)
 end
 
 function unreal(z::Multivector1)

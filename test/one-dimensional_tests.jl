@@ -3,8 +3,8 @@ using Base.Test: @test, @test_throws
 
 # Multivector1:same typed arguments
 @test begin
-    l = Multivector1(1, 2)
-    r = Multivector1{Int64}(1, 2)
+    l = Multivector1(1.2, 3.4)
+    r = Multivector1{Float64}(1.2, 3.4)
     l == r
 end
 
@@ -29,10 +29,17 @@ end
     l == r
 end
 
-# unreal
+# unreal: Multivector1
 @test begin
     l = unreal(Multivector1(3, 4))
     r = 4
+    l == r
+end
+
+# unreal: Real
+@test begin
+    l = unreal(3.14)
+    r = 0.0
     l == r
 end
 
@@ -457,5 +464,39 @@ end
 @test begin
     l = iszerodivisor(Multivector1(0, 3))
     r = true
+    l == r
+end
+
+# selfstar
+@test begin
+    a = 1.2
+    b = 3.4
+    l = selfstar(Multivector1(a, b))
+    r = Multivector1((a + b) / 2, (a + b) / 2)
+    l == r
+end
+
+# Involutivity of selfstar
+@test begin
+    z = Multivector1(1.2, 3.4)
+    l = selfstar(selfstar(z))
+    r = selfstar(z)
+    l == r
+end
+
+# antiselfstar
+@test begin
+    a = 1.2
+    b = 3.4
+    l = antiselfstar(Multivector1(a, b))
+    r = Multivector1((a - b) / 2, (b - a) / 2)
+    l == r
+end
+
+# Involutivity of antiselfstar
+@test begin
+    z = Multivector1(1.2, 3.4)
+    l = antiselfstar(antiselfstar(z))
+    r = antiselfstar(z)
     l == r
 end
