@@ -170,6 +170,13 @@ end
     l == r
 end
 
+# +: unary
+@test begin
+    l = +(Multivector1(1, 2))
+    r = Multivector1(1, 2)
+    l == r
+end
+
 # +
 @test begin
     l = Multivector1(1, 2) + Multivector1(3, 4)
@@ -522,4 +529,11 @@ end
     l = String(take!(io))
     r = "[1: 1, A: 2]"
     l == r
+end
+
+# random
+@test begin
+    l = random(Multivector1{Int})
+    r = random(Multivector1{Int})
+    l != r
 end

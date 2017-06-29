@@ -355,3 +355,7 @@ end
 function (\)(a::Real, z::Multivector3)
     Multivector3(a \ z.l, a \ z.r)
 end
+
+function random(::Type{Multivector3{T}}) where T <: Real
+    Multivector3{T}(random(Multivector2{T}), random(Multivector2{T}))
+end

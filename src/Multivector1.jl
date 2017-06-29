@@ -218,3 +218,7 @@ function (\)(a::Real, z::Multivector1)
     
     Multivector1(a \ z.l, a \ z.r)
 end
+
+function random(::Type{Multivector1{T}}) where T <: Real
+    Multivector1{T}(rand(T), rand(T))
+end

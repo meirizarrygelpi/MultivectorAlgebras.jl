@@ -567,3 +567,48 @@ end
     r = real(crossratioR(y1, y2, y3, y4))
     l == r
 end
+
+# crossratioL and möbiusR
+@test begin
+    a = Multivector2(98, -42, -13, 118)
+    b = Multivector2(-54, 102, 86, 6)
+    c = Multivector2(-126, -18, 33, -74)
+    d = Multivector2(58, -86, 0, 20)
+    x1 = Multivector2(Int128(1) // 2, 3 // 4, 5 // 6, 7 // 8)
+    x2 = Multivector2(Int128(9) // 2, 10 // 4, 11 // 6, 12 // 8)
+    x3 = Multivector2(Int128(13) // 2, 14 // 4, 15 // 6, 16 // 8)
+    x4 = Multivector2(Int128(17) // 2, 18 // 4, 19 // 6, 20 // 8)
+    y1 = möbiusR(x1, a, b, c, d)
+    y2 = möbiusR(x2, a, b, c, d)
+    y3 = möbiusR(x3, a, b, c, d)
+    y4 = möbiusR(x4, a, b, c, d)
+    l = real(crossratioL(x1, x2, x3, x4))
+    r = real(crossratioL(y1, y2, y3, y4))
+    l == r
+end
+
+# crossratioR and möbiusL
+@test begin
+    a = Multivector2(98, -42, -13, 118)
+    b = Multivector2(-54, 102, 86, 6)
+    c = Multivector2(-126, -18, 33, -74)
+    d = Multivector2(58, -86, 0, 20)
+    x1 = Multivector2(Int128(1) // 2, 3 // 4, 5 // 6, 7 // 8)
+    x2 = Multivector2(Int128(9) // 2, 10 // 4, 11 // 6, 12 // 8)
+    x3 = Multivector2(Int128(13) // 2, 14 // 4, 15 // 6, 16 // 8)
+    x4 = Multivector2(Int128(17) // 2, 18 // 4, 19 // 6, 20 // 8)
+    y1 = möbiusL(x1, a, b, c, d)
+    y2 = möbiusL(x2, a, b, c, d)
+    y3 = möbiusL(x3, a, b, c, d)
+    y4 = möbiusL(x4, a, b, c, d)
+    l = real(crossratioR(x1, x2, x3, x4))
+    r = real(crossratioR(y1, y2, y3, y4))
+    l == r
+end
+
+# random
+@test begin
+    l = random(Multivector2{Int})
+    r = random(Multivector2{Int})
+    l != r
+end

@@ -270,3 +270,7 @@ end
 function (\)(a::Real, z::Multivector2)
     Multivector2(a \ z.l, a \ z.r)
 end
+
+function random(::Type{Multivector2{T}}) where T <: Real
+    Multivector2{T}(random(Multivector1{T}), random(Multivector1{T}))
+end
