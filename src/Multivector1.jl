@@ -37,6 +37,10 @@ function real(z::Multivector1)
     z.l
 end
 
+function unreal(a::Real)
+    0
+end
+
 function unreal(z::Multivector1)
     z.r
 end
