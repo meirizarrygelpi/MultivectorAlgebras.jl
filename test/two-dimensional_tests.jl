@@ -291,14 +291,14 @@ end
 # Non-commutativity of multiplication
 @test begin
     l = commutator(Multivector2(1, 2, 3, 4), Multivector2(5, 6, 7, 8))
-    r = zero(Multivector2{Int64})
+    r = Multivector2(0, 0, 0, 0)
     l != r
 end
 
 # Associativity of multiplication
 @test begin
     l = associator(Multivector2(1, 2, 3, 4), Multivector2(5, 6, 7, 8), Multivector2(9, 10, 11, 12))
-    r = zero(Multivector2{Int64})
+    r = Multivector2(0, 0, 0, 0)
     l == r
 end
 
